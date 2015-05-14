@@ -82,6 +82,8 @@ void Pipe::initPipe( const int& type, const int& pipe, const int& rotate )
     _rotate = rotate;
     _carry_color = Color3B::WHITE;
     _carry_entity = 0;
+    
+    _connect.clear();
 
     if( _pipe == 0 )
     {

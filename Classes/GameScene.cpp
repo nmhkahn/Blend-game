@@ -232,8 +232,6 @@ void GameScene::flow( ColorNode* start )
                 {
                     for( auto it3 : (*it)._connect )
                     {
-                        //cout << "x:" << (*it)._gridX << " y:" << (*it)._gridY << endl;
-                        //cout << "connect L " << it3.first << it3.second << endl << endl;
                         if( grid->_gridX == it3.first &&
                             grid->_gridY == it3.second )
                         {
@@ -404,6 +402,12 @@ void GameScene::clearGrid()
 
 void GameScene::rotatePipe( Pipe* pipe )
 {
-    pipe->_connect.clear();
-    pipe->initPipe(pipe->_type, pipe->_type, ++pipe->_rotate);
+    ++pipe->_rotate %= 4;
+    cout << pipe->_rotate << endl;
+    
+    pipe->initPipe(pipe->_type, pipe->_pipe, pipe->_rotate);
+    for( auto it : pipe->_connect )
+    {
+        cout << it.first << "," << it.second << endl;
+    }
 }
