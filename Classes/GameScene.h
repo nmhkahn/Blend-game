@@ -24,6 +24,7 @@ public:
     void initLevel();
     void stageOver();
     void stageClear();
+    void changeScene();
     
     void flow( ColorNode* start );
     

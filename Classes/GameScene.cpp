@@ -181,12 +181,7 @@ void GameScene::stageOver()
     cout << "STAGE OVER" << endl << endl;
     _stageText->setString("stage over");
     
-    for( auto it : _grids )
-    {
-        (*it).setVisible(false);
-    }
-    
-    Director::getInstance()->replaceScene(GameScene::createScene(_level));
+    changeScene();
 }
 
 void GameScene::stageClear()
@@ -194,15 +189,21 @@ void GameScene::stageClear()
     cout << "STAGE CLEAR" << endl << endl;
     _stageText->setString("stage clear");
     
-    for( auto it : _grids )
-    {
-        (*it).setVisible(false);
-    }
-    
     //if( _level < max_stage ) _level++;
     //else _level = 0;
     
-    Director::getInstance()->replaceScene(GameScene::createScene(_level));
+    changeScene();
+}
+                 
+void GameScene::changeScene()
+{
+    auto seq = Sequence::create(DelayTime::create(0.5f),
+                                CallFunc::create([&]()
+                                {
+                                    cout << "callfunc" << endl;
+                                    Director::getInstance()->replaceScene(GameScene::createScene(_level));
+                                }), nullptr);
+    runAction(seq);
 }
 
 void GameScene::flow( ColorNode* start )
@@ -218,23 +219,41 @@ void GameScene::flow( ColorNode* start )
         int numAdjacent = 0;
         auto grid = queue.front();
         
-        // pop_back
+        // same as pop_back
         queue.erase(queue.begin());
         
+        // if poped-one is node (not start node)
+        // then stop flow
+        if( (grid->_gridX != start->_gridX ||
+             grid->_gridY != start->_gridY) &&
+             grid->getTag() == Type::COLOR_NODE )
+        {
+            continue;
+        }
+        
         // find adjacent grid of pop_back one's
+        // for-all grids
         for( auto it : _grids )
         {
+            // for-all connected-grid of start's
             for( auto it2 : grid->_connect )
             {
+                // if target is not visited &&
+                // is connect to start -> target
                 if( !(*it)._visit &&
                      (*it)._gridX == it2.first &&
                      (*it)._gridY == it2.second )
                 {
+                    // for-all connected-grid of target's
                     for( auto it3 : (*it)._connect )
                     {
+                        // if connect to target -> start
                         if( grid->_gridX == it3.first &&
                             grid->_gridY == it3.second )
                         {
+                            //cout << "tar: " << (*it)._gridX << "," << (*it)._gridY << endl;
+                            //cout << "grid conn: " << it2.first << "," << it2.second << endl;
+                            //cout << "tar conn: " << it3.first << "," << it3.second << endl;
                             (*it)._visit = true;
                             queue.pushBack(&(*it));
                             numAdjacent++;
@@ -243,8 +262,9 @@ void GameScene::flow( ColorNode* start )
                 }
             }
         }
-        
+                
         // check lose condition
+        // 1. no connected grid
         if( !numAdjacent &&
             grid->getTag() != Type::COLOR_NODE )
         {
@@ -296,6 +316,13 @@ void GameScene::flow( ColorNode* start )
                     node->_entity = flowEntity;
                     node->_color = flowColor;
                 }
+                // check lose condition
+                // 1. blend with other color
+                else if( node->_color != flowColor )
+                {
+                    cout << "blend with other color" << endl;
+                    stageOver();
+                }
                 else
                 {
                     node->_entity += flowEntity;
@@ -317,6 +344,9 @@ void GameScene::flow( ColorNode* start )
     clearGrid();
     
     // check win/lose condition
+    // 1. win  : all node's entity reach 255
+    // 2. lose : total entity belows 250
+    bool isFull = true;
     int totalEntity = 0;
     
     for( auto it : _grids )
@@ -324,15 +354,20 @@ void GameScene::flow( ColorNode* start )
         if( (*it).getTag() != Type::COLOR_NODE ) continue;
         auto node = static_cast<ColorNode*>(it);
         
-        if( node->_color != Color3B::WHITE &&
-            node->_entity == 255 )
+        if( node->_entity < 250 )
         {
-            stageClear();
+            isFull = false;
         }
         else if( node->_color != Color3B::WHITE )
         {
             totalEntity += node->_entity;
         }
+    }
+    
+    if( isFull )
+    {
+        cout << "all node is full" << endl;
+        stageClear();
     }
     if( totalEntity < 250 )
     {
@@ -403,11 +438,5 @@ void GameScene::clearGrid()
 void GameScene::rotatePipe( Pipe* pipe )
 {
     ++pipe->_rotate %= 4;
-    cout << pipe->_rotate << endl;
-    
     pipe->initPipe(pipe->_type, pipe->_pipe, pipe->_rotate);
-    for( auto it : pipe->_connect )
-    {
-        cout << it.first << "," << it.second << endl;
-    }
 }
