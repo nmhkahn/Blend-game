@@ -1,0 +1,69 @@
+{ 
+    "Nodes" :
+    [
+        {
+            "gridX"  : 2,
+            "gridY"  : 2,
+            "color"  : 0,
+            "entity" : 85
+        },
+        {
+            "gridX"  : 2,
+            "gridY"  : 4,
+            "color"  : 0,
+            "entity" : 85        
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 2,
+            "color"  : 0,
+            "entity" : 85        
+        }
+    ],
+
+    "Pipes" :
+    [
+        {
+            "gridX"  : 3,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 2,
+            "pipe"   : 2,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 2,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 4,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 3
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 3,
+            "pipe"   : 1,
+            "type"   : 20,
+            "rotate" : 3
+        }
+    ]
+}
