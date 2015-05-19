@@ -26,6 +26,8 @@ public:
     void changeScene();
     
     void flow( ColorNode* start );
+    void findAdjacent( Grid* grid, int& numAdjacent );
+    void flowAdjacent( Grid* grid, const int& numAdjacent );
     
     void updateColor();
     void updateText();
@@ -41,6 +43,9 @@ private:
     // container for sprite
     Sprite* _background;
     Vector<Grid*> _grids;
+    
+    // queue for store adjacent grid
+    Vector<Grid*> _queue;
     
     // ui
     Vector<Text*> _textList;

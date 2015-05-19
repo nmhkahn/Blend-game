@@ -199,21 +199,113 @@ void GameScene::changeScene()
     runAction(seq);
 }
 
+void GameScene::findAdjacent( Grid* grid, int& numAdjacent )
+{
+    // find adjacent grid of pop_back one's
+    // for-all grids
+    for( auto it : _grids )
+    {
+        // for-all connected-grid of start's
+        for( auto it2 : grid->_connect )
+        {
+            // if target is not visited &&
+            // is connect to start -> target
+            if( !(*it)._visit &&
+               (*it)._gridPos == it2 )
+            {
+                // for-all connected-grid of target's
+                for( auto it3 : (*it)._connect )
+                {
+                    // if connect to target -> start
+                    if( grid->_gridPos == it3 )
+                    {
+                        (*it)._visit = true;
+                        _queue.pushBack(&(*it));
+                        numAdjacent++;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void GameScene::flowAdjacent( Grid* grid, const int& numAdjacent )
+{
+    // variable for next flow
+    int flowEntity;
+    Color3B flowColor;
+    
+    // set color for next flow
+    if( grid->getTag() == Type::COLOR_NODE )
+    {
+        auto node = static_cast<ColorNode*>(grid);
+        
+        flowEntity = node->_entity / numAdjacent;
+        flowColor = node->_color;
+        
+        node->_entity = 0;
+        node->_color = Color3B::WHITE;
+    }
+    else
+    {
+        auto pipe = static_cast<Pipe*>(grid);
+        
+        flowEntity = pipe->_carry_entity / numAdjacent;
+        flowColor = pipe->_carry_color;
+        
+        pipe->_carry_entity = 0;
+        pipe->_carry_color = Color3B::WHITE;
+    }
+    
+    for( int i = 0; i < numAdjacent; i++ )
+    {
+        // set color of lastest grid
+        auto grid = _queue.at(_queue.size()-1-i);
+        
+        if( grid->getTag() == Type::COLOR_NODE )
+        {
+            auto node = static_cast<ColorNode*>(grid);
+            
+            if( node->_color == Color3B::WHITE )
+            {
+                node->_entity = flowEntity;
+                node->_color = flowColor;
+            }
+            // check lose condition
+            // 1. blend with other color
+            else if( node->_color != flowColor )
+            {
+                cout << "blend with other color" << endl;
+                stageOver();
+            }
+            else
+            {
+                node->_entity += flowEntity;
+            }
+        }
+        else
+        {
+            auto pipe = static_cast<Pipe*>(grid);
+            
+            pipe->_carry_entity = flowEntity;
+            pipe->_carry_color = flowColor;
+        }
+    }
+}
+
 void GameScene::flow( ColorNode* start )
 {
-    // queue for store adjacent grid
-    Vector<Grid*> queue;
-    
     start->_visit = true;
-    queue.pushBack(start);
+    _queue.pushBack(start);
     
-    while( !queue.empty() )
+    // path finding : BFS
+    while( !_queue.empty() )
     {
         int numAdjacent = 0;
-        auto grid = queue.front();
+        auto grid = _queue.front();
         
         // same as pop_back
-        queue.erase(queue.begin());
+        _queue.erase(_queue.begin());
         
         // if poped-one is node (not start node)
         // then stop flow
@@ -223,36 +315,9 @@ void GameScene::flow( ColorNode* start )
             continue;
         }
         
-        // find adjacent grid of pop_back one's
-        // for-all grids
-        for( auto it : _grids )
-        {
-            // for-all connected-grid of start's
-            for( auto it2 : grid->_connect )
-            {
-                // if target is not visited &&
-                // is connect to start -> target
-                if( !(*it)._visit &&
-                     (*it)._gridPos == it2 )
-                {
-                    // for-all connected-grid of target's
-                    for( auto it3 : (*it)._connect )
-                    {
-                        // if connect to target -> start
-                        if( grid->_gridPos == it3 )
-                        {
-                            //cout << "tar: " << (*it)._gridX << "," << (*it)._gridY << endl;
-                            //cout << "grid conn: " << it2.first << "," << it2.second << endl;
-                            //cout << "tar conn: " << it3.first << "," << it3.second << endl;
-                            (*it)._visit = true;
-                            queue.pushBack(&(*it));
-                            numAdjacent++;
-                        }
-                    }
-                }
-            }
-        }
-                
+        findAdjacent(grid, numAdjacent);
+        cout <<"outsize : " << _queue.size() << endl;
+        
         // check lose condition
         // 1. no connected grid
         if( !numAdjacent &&
@@ -265,67 +330,10 @@ void GameScene::flow( ColorNode* start )
         // if no adjacent grid, continue
         else if( !numAdjacent ) continue;
         
-        // variable for next flow
-        int flowEntity;
-        Color3B flowColor;
-        
-        // set color for next flow
-        if( grid->getTag() == Type::COLOR_NODE )
-        {
-            auto node = static_cast<ColorNode*>(grid);
-            
-            flowEntity = node->_entity / numAdjacent;
-            flowColor = node->_color;
-            
-            node->_entity = 0;
-            node->_color = Color3B::WHITE;
-        }
-        else
-        {
-            auto pipe = static_cast<Pipe*>(grid);
-            
-            flowEntity = pipe->_carry_entity / numAdjacent;
-            flowColor = pipe->_carry_color;
-            
-            pipe->_carry_entity = 0;
-            pipe->_carry_color = Color3B::WHITE;
-        }
-        
         // flow to adjacent grid
-        for( int i = 0; i < numAdjacent; i++ )
-        {
-            // set color of lastest grid
-            auto grid = queue.at(queue.size()-1-i);
-            
-            if( grid->getTag() == Type::COLOR_NODE )
-            {
-                auto node = static_cast<ColorNode*>(grid);
-                
-                if( node->_color == Color3B::WHITE )
-                {
-                    node->_entity = flowEntity;
-                    node->_color = flowColor;
-                }
-                // check lose condition
-                // 1. blend with other color
-                else if( node->_color != flowColor )
-                {
-                    cout << "blend with other color" << endl;
-                    stageOver();
-                }
-                else
-                {
-                    node->_entity += flowEntity;
-                }
-            }
-            else
-            {
-                auto pipe = static_cast<Pipe*>(grid);
-                
-                pipe->_carry_entity = flowEntity;
-                pipe->_carry_color = flowColor;
-            }
-        }
+        flowAdjacent(grid, numAdjacent);
+        
+        cout << "num" << endl;
         
         updateColor();
         updateText();
