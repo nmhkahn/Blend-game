@@ -12,6 +12,11 @@ bool Grid::init()
     return initWithTexture(nullptr, Rect::ZERO );;
 }
 
+void Grid::gridToPos()
+{
+    setPosition(Vec2(90*_gridPos.x, 90*_gridPos.y));
+}
+
 ColorNode* ColorNode::create( const int& gridX,
                               const int& gridY )
 {
@@ -19,15 +24,13 @@ ColorNode* ColorNode::create( const int& gridX,
     if( node && node->init() )
     {
         node->autorelease();
-        node->_gridX = gridX;
-        node->_gridY = gridY;
+        node->_gridPos = Vec2(gridX, gridY);
+        node->gridToPos();
     }
     else
     {
         CC_SAFE_DELETE(node);
     }
-
-    node->setPosition(Vec2(90*gridX + 100, 90*gridY + 80));
     
     return node;
 }
@@ -36,10 +39,10 @@ void ColorNode::initColorNode( const int& color, const int& entity )
 {
     _entity = entity;
     
-    _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-    _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-    _connect.push_back(pair<int, int>(_gridX, _gridY+1));
-    _connect.push_back(pair<int, int>(_gridX, _gridY-1));
+    _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+    _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+    _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
+    _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
     
     setTexture("res/node.png");
     setScale(0.75, 0.75);
@@ -62,15 +65,13 @@ Pipe* Pipe::create( const int& gridX,
     if( pipe && pipe->init() )
     {
         pipe->autorelease();
-        pipe->_gridX = gridX;
-        pipe->_gridY = gridY;
+        pipe->_gridPos = Vec2(gridX, gridY);
+        pipe->gridToPos();
     }
     else
     {
         CC_SAFE_DELETE(pipe);
     }
-    
-    pipe->setPosition(Vec2(90*gridX + 100, 90*gridY + 80));
     
     return pipe;
 }
@@ -92,13 +93,13 @@ void Pipe::initPipe( const int& type, const int& pipe, const int& rotate )
         
         if( _rotate % 2 == 0 )
         {
-            _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX-1, _gridY));
+            _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
         }
         else
         {
-            _connect.push_back(pair<int, int>(_gridX, _gridY+1));
-            _connect.push_back(pair<int, int>(_gridX, _gridY-1));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
         }
     }
     else if( _pipe == 1 )
@@ -108,23 +109,23 @@ void Pipe::initPipe( const int& type, const int& pipe, const int& rotate )
         
         if( _rotate == 0 )
         {
-            _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY+1));
+            _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
         }
         else if( _rotate == 1 )
         {
-            _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY+1));
+            _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
         }
         else if( _rotate == 2 )
         {
-            _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY-1));
+            _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
         }
         else if( _rotate == 3 )
         {
-            _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY-1));
+            _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
         }
     }
     else if( _pipe == 2 )
@@ -134,27 +135,27 @@ void Pipe::initPipe( const int& type, const int& pipe, const int& rotate )
         
         if( _rotate == 0 )
         {
-            _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY+1));
+            _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
         }
         else if( _rotate == 1 )
         {
-            _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY-1));
-            _connect.push_back(pair<int, int>(_gridX, _gridY+1));
+            _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
         }
         else if( _rotate == 2 )
         {
-            _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY-1));
+            _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
         }
         else if( _rotate == 3 )
         {
-            _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-            _connect.push_back(pair<int, int>(_gridX, _gridY-1));
-            _connect.push_back(pair<int, int>(_gridX, _gridY+1));
+            _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
+            _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
         }
         
     }
@@ -162,10 +163,10 @@ void Pipe::initPipe( const int& type, const int& pipe, const int& rotate )
     {
         setTag(Type::PIPE);
         setTexture("res/pipe3.png");
-        _connect.push_back(pair<int, int>(_gridX-1, _gridY));
-        _connect.push_back(pair<int, int>(_gridX, _gridY+1));
-        _connect.push_back(pair<int, int>(_gridX+1, _gridY));
-        _connect.push_back(pair<int, int>(_gridX, _gridY-1));
+        _connect.push_back(Vec2(_gridPos.x-1, _gridPos.y));
+        _connect.push_back(Vec2(_gridPos.x, _gridPos.y+1));
+        _connect.push_back(Vec2(_gridPos.x+1, _gridPos.y));
+        _connect.push_back(Vec2(_gridPos.x, _gridPos.y-1));
     }
     
     setScale(0.75, 0.75);

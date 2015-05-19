@@ -45,9 +45,7 @@ private:
     // ui
     Vector<Text*> _textList;
     Text* _stageText;
-    
-    Vector<Grid*> _finds;
-    
+        
     size_t _level;
 };
 

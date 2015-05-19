@@ -7,10 +7,11 @@ USING_NS_CC;
 struct Grid : public Sprite
 {
     virtual bool init();
+    void gridToPos();
     
-    int _gridX, _gridY;
+    Vec2 _gridPos;
     bool _visit;
-    std::vector<std::pair<int, int>> _connect; // connected grid -> pair(gridX, gridY)
+    std::vector<Vec2> _connect; // connected grid
 };
 
 struct ColorNode : public Grid

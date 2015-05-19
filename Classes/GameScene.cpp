@@ -217,9 +217,8 @@ void GameScene::flow( ColorNode* start )
         
         // if poped-one is node (not start node)
         // then stop flow
-        if( (grid->_gridX != start->_gridX ||
-             grid->_gridY != start->_gridY) &&
-             grid->getTag() == Type::COLOR_NODE )
+        if( grid->_gridPos != start->_gridPos &&
+            grid->getTag() == Type::COLOR_NODE )
         {
             continue;
         }
@@ -234,15 +233,13 @@ void GameScene::flow( ColorNode* start )
                 // if target is not visited &&
                 // is connect to start -> target
                 if( !(*it)._visit &&
-                     (*it)._gridX == it2.first &&
-                     (*it)._gridY == it2.second )
+                     (*it)._gridPos == it2 )
                 {
                     // for-all connected-grid of target's
                     for( auto it3 : (*it)._connect )
                     {
                         // if connect to target -> start
-                        if( grid->_gridX == it3.first &&
-                            grid->_gridY == it3.second )
+                        if( grid->_gridPos == it3 )
                         {
                             //cout << "tar: " << (*it)._gridX << "," << (*it)._gridY << endl;
                             //cout << "grid conn: " << it2.first << "," << it2.second << endl;
