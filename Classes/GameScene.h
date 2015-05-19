@@ -19,7 +19,6 @@ public:
     virtual bool init( size_t level );
     virtual void onEnter();
     virtual void onExit();
-    virtual void update( float delta );
     
     void initLevel();
     void stageOver();

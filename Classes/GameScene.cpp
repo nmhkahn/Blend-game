@@ -54,6 +54,8 @@ bool GameScene::init( size_t level )
  
 void GameScene::onEnter()
 {
+    Node::onEnter();
+    
     auto listner = EventListenerTouchOneByOne::create();
     
     listner->setSwallowTouches(true);
@@ -107,23 +109,17 @@ void GameScene::onEnter()
 void GameScene::onExit()
 {
     Director::getInstance()->getEventDispatcher()->removeAllEventListeners();
-}
-
-void GameScene::update( float delta )
-{
-    // visualize?
+    
+    Node::onExit();
 }
 
 void GameScene::initLevel()
 {
     string level = to_string(_level);
     string path  = "level/level"+level+".json";
-    
-    //cout << "path : " << path << endl;
-    
+        
     auto futil = FileUtils::getInstance();
     auto str = (futil->getStringFromFile(path)).data();
-    //cout << "start" << endl << str << endl << "end" << endl;
     
     rapidjson::Document document;
     document.Parse<0>(str);
@@ -189,9 +185,7 @@ void GameScene::stageClear()
     cout << "STAGE CLEAR" << endl << endl;
     _stageText->setString("stage clear");
     
-    //if( _level < max_stage ) _level++;
-    //else _level = 0;
-    
+    if( _level < max_stage ) _level++;
     changeScene();
 }
                  
@@ -200,7 +194,6 @@ void GameScene::changeScene()
     auto seq = Sequence::create(DelayTime::create(0.5f),
                                 CallFunc::create([&]()
                                 {
-                                    cout << "callfunc" << endl;
                                     Director::getInstance()->replaceScene(GameScene::createScene(_level));
                                 }), nullptr);
     runAction(seq);
