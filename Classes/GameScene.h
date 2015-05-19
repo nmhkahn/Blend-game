@@ -29,6 +29,9 @@ public:
     void findAdjacent( Grid* grid, int& numAdjacent );
     void flowAdjacent( Grid* grid, const int& numAdjacent );
     
+    void draw( ColorNode* start );
+    void drawAction( Node* sender, Grid* grid );
+    
     void updateColor();
     void updateText();
     void clearGrid();
@@ -46,6 +49,8 @@ private:
     
     // queue for store adjacent grid
     Vector<Grid*> _queue;
+    // queue for store route to draw pipe
+    Vector<Grid*> _route;
     
     // ui
     Vector<Text*> _textList;

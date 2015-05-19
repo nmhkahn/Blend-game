@@ -86,6 +86,7 @@ void GameScene::onEnter()
                 if( rect.containsPoint(loc) )
                 {
                     flow(node);
+                    draw(node);
                 }
             }
             else if( (*iter).getTag() == Type::ROTATABLE_PIPE )
@@ -221,6 +222,7 @@ void GameScene::findAdjacent( Grid* grid, int& numAdjacent )
                     {
                         (*it)._visit = true;
                         _queue.pushBack(&(*it));
+                        _route.pushBack(&(*it));
                         numAdjacent++;
                     }
                 }
@@ -316,7 +318,6 @@ void GameScene::flow( ColorNode* start )
         }
         
         findAdjacent(grid, numAdjacent);
-        cout <<"outsize : " << _queue.size() << endl;
         
         // check lose condition
         // 1. no connected grid
@@ -332,8 +333,6 @@ void GameScene::flow( ColorNode* start )
         
         // flow to adjacent grid
         flowAdjacent(grid, numAdjacent);
-        
-        cout << "num" << endl;
         
         updateColor();
         updateText();
@@ -372,6 +371,25 @@ void GameScene::flow( ColorNode* start )
         cout << "total is < 250" << endl;
         stageOver();
     }
+}
+
+void GameScene::drawAction( Node* sender, Grid* grid )
+{
+    grid->setColor(Color3B::MAGENTA);
+}
+
+void GameScene::draw( ColorNode* start )
+{
+    Vector<FiniteTimeAction*> vfta;
+    
+    for( auto it : _route )
+    {
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, &(*it))));
+        vfta.pushBack(DelayTime::create(0.3));
+    }
+    
+    auto seq = Sequence::create(vfta);
+    runAction(seq);
 }
 
 void GameScene::updateColor()
