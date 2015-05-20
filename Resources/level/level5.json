@@ -1,0 +1,117 @@
+{ 
+    "Nodes" :
+    [
+        {
+            "gridX"  : 2,
+            "gridY"  : 7,
+            "color"  : 0,
+            "entity" : 130
+        },
+        {
+            "gridX"  : 2,
+            "gridY"  : 2,
+            "color"  : 2,
+            "entity" : 130
+        },
+        {
+            "gridX"  : 9,
+            "gridY"  : 7,
+            "color"  : 0,
+            "entity" : 130
+        },
+        {
+            "gridX"  : 9,
+            "gridY"  : 2,
+            "color"  : 2,
+            "entity" : 130        
+        }
+    ],
+
+    "Pipes" :
+    [
+        {
+            "gridX"  : 3,
+            "gridY"  : 7,
+            "pipe"   : 2,
+            "type"   : 10,
+            "rotate" : 2
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 7,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 7,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 7,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 7,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 8,
+            "gridY"  : 7,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 6,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 8,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        }
+    ]
+}

@@ -1,0 +1,222 @@
+{ 
+    "Nodes" :
+    [
+        {
+            "gridX"  : 3,
+            "gridY"  : 7,
+            "color"  : 0,
+            "entity" : 130
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 7,
+            "color"  : 2,
+            "entity" : 130
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 3,
+            "color"  : 0,
+            "entity" : 130
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 3,
+            "color"  : 2,
+            "entity" : 130        
+        }
+    ],
+
+    "Pipes" :
+    [
+        {
+            "gridX"  : 2,
+            "gridY"  : 3,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 8,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 9,
+            "gridY"  : 3,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 2,
+            "gridY"  : 4,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 2
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 8,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 9,
+            "gridY"  : 4,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 10,
+            "gridY"  : 4,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 10,
+            "gridY"  : 5,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 3
+        },
+        {
+            "gridX"  : 9,
+            "gridY"  : 5,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 8,
+            "gridY"  : 5,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 5,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 5,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 5,
+            "pipe"   : 1,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 5,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 5,
+            "pipe"   : 1,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 6,
+            "pipe"   : 2,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 6,
+            "pipe"   : 2,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 20,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 8,
+            "gridY"  : 6,
+            "pipe"   : 0,
+            "type"   : 10,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 9,
+            "gridY"  : 6,
+            "pipe"   : 1,
+            "type"   : 10,
+            "rotate" : 3
+        }
+    ]
+}
