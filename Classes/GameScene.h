@@ -31,6 +31,7 @@ public:
     
     void draw( ColorNode* start );
     void drawAction( Node* sender, Grid* grid );
+    void after( Node* sender, Grid* grid );
     
     void updateColor();
     void updateText();
@@ -55,6 +56,9 @@ private:
     // ui
     Vector<Text*> _textList;
     Text* _stageText;
+    
+    // check win condition
+    int _clearCond;
         
     size_t _level;
 };

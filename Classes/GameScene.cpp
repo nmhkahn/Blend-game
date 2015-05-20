@@ -45,6 +45,7 @@ bool GameScene::init( size_t level )
     this->addChild(_background);
     
     _level = level;
+    _clearCond = 0;
     initLevel();
     
     schedule(CC_SCHEDULE_SELECTOR(GameScene::update));
@@ -222,7 +223,6 @@ void GameScene::findAdjacent( Grid* grid, int& numAdjacent )
                     {
                         (*it)._visit = true;
                         _queue.pushBack(&(*it));
-                        _route.pushBack(&(*it));
                         numAdjacent++;
                     }
                 }
@@ -245,8 +245,8 @@ void GameScene::flowAdjacent( Grid* grid, const int& numAdjacent )
         flowEntity = node->_entity / numAdjacent;
         flowColor = node->_color;
         
-        node->_entity = 0;
-        node->_color = Color3B::WHITE;
+        //node->_entity = 0;
+        //node->_color = Color3B::WHITE;
     }
     else
     {
@@ -255,8 +255,8 @@ void GameScene::flowAdjacent( Grid* grid, const int& numAdjacent )
         flowEntity = pipe->_carry_entity / numAdjacent;
         flowColor = pipe->_carry_color;
         
-        pipe->_carry_entity = 0;
-        pipe->_carry_color = Color3B::WHITE;
+        //pipe->_carry_entity = 0;
+        //pipe->_carry_color = Color3B::WHITE;
     }
     
     for( int i = 0; i < numAdjacent; i++ )
@@ -278,7 +278,7 @@ void GameScene::flowAdjacent( Grid* grid, const int& numAdjacent )
             else if( node->_color != flowColor )
             {
                 cout << "blend with other color" << endl;
-                stageOver();
+                _clearCond = lose_blend;
             }
             else
             {
@@ -305,6 +305,7 @@ void GameScene::flow( ColorNode* start )
     {
         int numAdjacent = 0;
         auto grid = _queue.front();
+        _route.pushBack(grid);
         
         // same as pop_back
         _queue.erase(_queue.begin());
@@ -325,7 +326,7 @@ void GameScene::flow( ColorNode* start )
             grid->getTag() != Type::COLOR_NODE )
         {
             cout << "no connected" << endl;
-            stageOver();
+            _clearCond = lose_noconnect;
             return;
         }
         // if no adjacent grid, continue
@@ -334,59 +335,125 @@ void GameScene::flow( ColorNode* start )
         // flow to adjacent grid
         flowAdjacent(grid, numAdjacent);
         
-        updateColor();
-        updateText();
-    }
-    
-    clearGrid();
-    
-    // check win/lose condition
-    // 1. win  : all node's entity reach 255
-    // 2. lose : total entity belows 250
-    bool isFull = true;
-    int totalEntity = 0;
-    
-    for( auto it : _grids )
-    {
-        if( (*it).getTag() != Type::COLOR_NODE ) continue;
-        auto node = static_cast<ColorNode*>(it);
-        
-        if( node->_entity < 250 )
-        {
-            isFull = false;
-        }
-        else if( node->_color != Color3B::WHITE )
-        {
-            totalEntity += node->_entity;
-        }
-    }
-    
-    if( isFull )
-    {
-        cout << "all node is full" << endl;
-        stageClear();
-    }
-    if( totalEntity < 250 )
-    {
-        cout << "total is < 250" << endl;
-        stageOver();
+        //updateColor();
     }
 }
 
 void GameScene::drawAction( Node* sender, Grid* grid )
 {
-    grid->setColor(Color3B::MAGENTA);
+    int opacity;
+    Color3B color;
+    
+    if( grid->getTag() == Type::COLOR_NODE )
+    {
+        auto node = static_cast<ColorNode*>(grid);
+        
+        opacity = node->_entity;
+        color = node->_color;
+    }
+    else
+    {
+        auto pipe = static_cast<Pipe*>(grid);
+        
+        opacity = pipe->_carry_entity;
+        color = pipe->_carry_color;
+    }
+    
+    grid->setOpacity(opacity);
+    grid->setColor(color);
+}
+
+void GameScene::after( Node* sender, Grid* grid )
+{
+    if( grid->getTag() != Type::COLOR_NODE )
+    {
+        auto pipe = static_cast<Pipe*>(grid);
+        
+        pipe->_carry_entity = 255;
+        pipe->_carry_color = Color3B::WHITE;
+        
+        pipe->setOpacity(pipe->_carry_entity);
+        pipe->setColor(pipe->_carry_color);
+    }
 }
 
 void GameScene::draw( ColorNode* start )
 {
     Vector<FiniteTimeAction*> vfta;
     
+    vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, _route.front())));
+    vfta.pushBack(DelayTime::create(0.1));
+    vfta.pushBack(CallFunc::create([&]()
+                  {
+                      start->_color = Color3B::WHITE;
+                      start->_entity = 255;
+                      
+                      start->setOpacity(start->_entity);
+                      start->setColor(start->_color);
+                  }));
+    _route.popBack();
+    
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, &(*it))));
-        vfta.pushBack(DelayTime::create(0.3));
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, &(*it))));
+        vfta.pushBack(DelayTime::create(0.1));
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::after, this, &(*it))));
     }
+    
+    vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateColor, this)));
+    vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
+    vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::clearGrid, this)));
+    vfta.pushBack(CallFunc::create([&]()
+                  {
+                      // check win/lose condition
+                      // 1. win  : all node's entity reach 255
+                      // 2. lose : total entity belows 250
+                      bool isFull = true;
+                      int totalEntity = 0;
+                      
+                      for( auto it : _grids )
+                      {
+                          if( (*it).getTag() != Type::COLOR_NODE ) continue;
+                          auto node = static_cast<ColorNode*>(it);
+                          
+                          if( node->_entity < 250 )
+                          {
+                              isFull = false;
+                          }
+                          else if( node->_color != Color3B::WHITE )
+                          {
+                              totalEntity += node->_entity;
+                          }
+                      }
+                      
+                      if( isFull )
+                      {
+                          cout << "all node is full" << endl;
+                          _clearCond = win;
+                      }
+                      if( totalEntity < 250 )
+                      {
+                          cout << "total is < 250" << endl;
+                          _clearCond = lose_total;
+                      }
+                      
+                      switch( _clearCond )
+                      {
+                          case lose_blend:
+                              stageOver();
+                              break;
+                          case lose_noconnect:
+                              stageOver();
+                              break;
+                          case lose_total:
+                              stageOver();
+                              break;
+                          case win:
+                              stageClear();
+                              break;
+                      }
+                  }));
     
     auto seq = Sequence::create(vfta);
     runAction(seq);
@@ -412,7 +479,9 @@ void GameScene::updateColor()
         }
         
         node->setColor(node->_color);
-        node->setOpacity(node->_entity);
+        
+        auto fto = FadeTo::create(0.1, node->_entity);
+        node->runAction(fto);
     }
 }
 
@@ -443,12 +512,22 @@ void GameScene::clearGrid()
         (*it)._visit = false;
         
         // clear carry in pipe
-        if( (*it).getTag() == Type::COLOR_NODE ) continue;
-        auto pipe = static_cast<Pipe*>(it);
-        
-        pipe->_carry_color = Color3B::WHITE;
-        pipe->_carry_entity = 0;
+        if( (*it).getTag() == Type::COLOR_NODE )
+        {
+        }
+        else
+        {
+            auto pipe = static_cast<Pipe*>(it);
+            
+            pipe->_carry_entity = 0;
+            pipe->_carry_color = Color3B::WHITE;
+            
+            pipe->setOpacity(255);
+            pipe->setColor(pipe->_carry_color);
+        }
     }
+    
+    _route.clear();
 }
 
 void GameScene::rotatePipe( Pipe* pipe )
