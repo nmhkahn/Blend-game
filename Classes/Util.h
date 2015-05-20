@@ -11,7 +11,12 @@ enum Direc {UP, DOWN, RIGHT, LEFT};
 constexpr const int num_grid_width = 14; //  14 x 8 grid
 constexpr const int num_grid_height = 8; //
 
-constexpr const int max_stage = 2;
+constexpr const int max_stage = 4;
+
+constexpr const int lose_blend = 1;
+constexpr const int lose_noconnect = 2;
+constexpr const int lose_total = 3;
+constexpr const int win = 4;
 
 
 // util function for rotate
