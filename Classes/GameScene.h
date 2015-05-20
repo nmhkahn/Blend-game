@@ -55,7 +55,6 @@ private:
     
     // ui
     Vector<Text*> _textList;
-    Text* _stageText;
     
     // check win condition
     int _clearCond;

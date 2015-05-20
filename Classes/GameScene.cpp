@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "GameScene.h"
+#include "LoadScene.h"
 #include "Util.h"
 #include "rapidjson/document.h"
 
@@ -164,29 +165,17 @@ void GameScene::initLevel()
         _textList.pushBack(text);
         addChild(text);
     }
-    
-    
-    // for test
-    _stageText = Text::create();
-    _stageText->setPosition(_center+Vec2(0, 300));
-    _stageText->setString("stage "+to_string(_level));
-    _stageText->setFontSize(30);
-    addChild(_stageText);
 }
 
 void GameScene::stageOver()
 {
     cout << "STAGE OVER" << endl << endl;
-    _stageText->setString("stage over");
-    
     changeScene();
 }
 
 void GameScene::stageClear()
 {
     cout << "STAGE CLEAR" << endl << endl;
-    _stageText->setString("stage clear");
-    
     if( _level < max_stage ) _level++;
     changeScene();
 }
@@ -196,7 +185,7 @@ void GameScene::changeScene()
     auto seq = Sequence::create(DelayTime::create(0.5f),
                                 CallFunc::create([&]()
                                 {
-                                    Director::getInstance()->replaceScene(GameScene::createScene(_level));
+                                    Director::getInstance()->replaceScene(LoadScene::createScene(_level));
                                 }), nullptr);
     runAction(seq);
 }
