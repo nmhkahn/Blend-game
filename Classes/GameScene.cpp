@@ -212,6 +212,7 @@ void GameScene::findAdjacent( Grid* grid, int& numAdjacent )
                     {
                         (*it)._visit = true;
                         _queue.pushBack(&(*it));
+                        _route.pushBack(&(*it));
                         numAdjacent++;
                     }
                 }
@@ -288,13 +289,13 @@ void GameScene::flow( ColorNode* start )
 {
     start->_visit = true;
     _queue.pushBack(start);
+    _route.pushBack(start);
     
     // path finding : BFS
     while( !_queue.empty() )
     {
         int numAdjacent = 0;
         auto grid = _queue.front();
-        _route.pushBack(grid);
         
         // same as pop_back
         _queue.erase(_queue.begin());
@@ -380,11 +381,9 @@ void GameScene::draw( ColorNode* start )
                       start->setOpacity(start->_entity);
                       start->setColor(start->_color);
                   }));
-    _route.popBack();
     
     for( auto it : _route )
     {
-        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, &(*it))));
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, &(*it))));
         vfta.pushBack(DelayTime::create(0.1));
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::after, this, &(*it))));
@@ -469,7 +468,7 @@ void GameScene::updateColor()
         
         node->setColor(node->_color);
         
-        auto fto = FadeTo::create(0.1, node->_entity);
+        auto fto = FadeTo::create(10, node->_entity);
         node->runAction(fto);
     }
 }

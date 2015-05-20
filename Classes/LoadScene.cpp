@@ -79,6 +79,5 @@ void LoadScene::hideIndicator()
 
 void LoadScene::transitScene()
 {
-    //auto scene = TransitionFade::create(1.0, GameScene::createScene(_level));
     Director:: getInstance()->replaceScene(GameScene::createScene(_level));
 }
