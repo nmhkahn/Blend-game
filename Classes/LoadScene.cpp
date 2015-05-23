@@ -3,7 +3,7 @@ using namespace std;
 #include "LoadScene.h"
 #include "GameScene.h"
 
-Scene* LoadScene::createScene( size_t level )
+Scene* LoadScene::createScene( const int& level )
 {
     auto scene = Scene::create();
     auto layer = LoadScene::create(level);
@@ -12,7 +12,7 @@ Scene* LoadScene::createScene( size_t level )
     return scene;
 }
 
-LoadScene* LoadScene::create( size_t level )
+LoadScene* LoadScene::create( const int& level )
 {
     LoadScene *ret = new (std::nothrow) LoadScene();
     if (ret && ret->init(level))
@@ -27,7 +27,7 @@ LoadScene* LoadScene::create( size_t level )
     }
 }
 
-bool LoadScene::init( size_t level )
+bool LoadScene::init( const int& level )
 {
     if ( !Layer::init() )
     {
@@ -44,11 +44,11 @@ bool LoadScene::init( size_t level )
     _background->setPosition(_center);
     this->addChild(_background);
     
-    _level_indicator = Text::create();
-    _level_indicator->setPosition(_center);
-    _level_indicator->setString(to_string(_level));
-    _level_indicator->setFontSize(50);
-    this->addChild(_level_indicator);
+    _indicator = Text::create();
+    _indicator->setPosition(_center);
+    _indicator->setString(to_string(_level));
+    _indicator->setFontSize(50);
+    this->addChild(_indicator);
     
     return true;
 }
@@ -74,7 +74,7 @@ void LoadScene::onExit()
 void LoadScene::hideIndicator()
 {
     auto foa = FadeOut::create(1.0);
-    _level_indicator->runAction(foa);
+    _indicator->runAction(foa);
 }
 
 void LoadScene::transitScene()

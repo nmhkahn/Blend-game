@@ -10,10 +10,10 @@ using namespace cocos2d::ui;
 class LoadScene : public Layer
 {
 public:
-    static Scene* createScene( size_t level );
-    static LoadScene* create( size_t level );
+    static Scene* createScene( const int& level );
+    static LoadScene* create( const int& level );
     
-    virtual bool init( size_t level );
+    virtual bool init( const int& level );
     virtual void onEnter();
     virtual void onExit();
     
@@ -26,9 +26,9 @@ private:
     Vec2 _center;
     
     Sprite* _background;
-    Text* _level_indicator;
+    Text* _indicator;
     
-    size_t _level;
+    int _level;
 };
 
 #endif
