@@ -7,35 +7,54 @@ USING_NS_CC;
 struct Grid : public Sprite
 {
     virtual bool init();
-    void gridToPos();
     
-    Vec2 _gridPos;
-    bool _visit;
-    std::vector<Vec2> _connect; // connected grid
+    Vec2 _coord;                /* grid coordinate */
+    bool _visit;                /* for bfs search */
+    std::vector<Vec2> _connect; /* connected grid */
+    
+    Color3B _color;
+    int _entity;
 };
 
 struct ColorNode : public Grid
 {
-    static ColorNode* create( const int& gridX,
-                              const int& gridY );
+    static ColorNode* create( const Vec2& coord );
     void initColorNode( const int& color, const int& entity );
-    
-    Color3B _color;
-    int _entity; // 0 to 255
 };
 
 struct Pipe : public Grid
 {
-    static Pipe* create( const int& gridX,
-                         const int& gridY );
-    void initPipe( const int& type, const int& pipe, const int& rotate );
+    static Pipe* create( const Vec2& coord );
+    void initPipe( const int& pipeType, const int& rotate );
     
-    int _type; // e.g normal, rotatable ....
-    int _pipe; // type of pipe
+    int _pipeType;
     int _rotate;
+};
+
+struct RotatablePipe : public Pipe
+{
+    static RotatablePipe* create( const Vec2& coord );
+    void initRPipe( const int& pipeType, const int& rotate );
     
-    Color3B _carry_color;
-    int _carry_entity;
+    Sprite* _ground;
+};
+
+struct SwitchPipe : public Pipe
+{
+    static SwitchPipe* create( const Vec2& coord );
+    void initSPipe( const int& pipeType1, const int& pipeType2, const int& rotate );
+    
+    int _pipeType[2];
+    Sprite* _ground;
+};
+
+struct TunnelPipe : public Pipe
+{
+    static TunnelPipe* create( const Vec2& coord );
+    void initTPipe( const int& pipeType, const int& type, const int& rotate );
+    
+    int _type;
+    Sprite* _tunnel;
 };
 
 #endif
