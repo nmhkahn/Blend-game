@@ -1,5 +1,5 @@
 { 
-    "Nodes" :
+    "NODE" :
     [
         {
             "gridX"  : 2,
@@ -27,28 +27,49 @@
         }
     ],
 
-    "Pipes" :
+    "N_PIPE" :
     [
         {
             "gridX"  : 3,
             "gridY"  : 2,
             "pipe"   : 0,
-            "type"   : 0,
             "rotate" : 0
         },
         {
             "gridX"  : 3,
             "gridY"  : 4,
             "pipe"   : 0,
-            "type"   : 0,
             "rotate" : 0
         },
         {
             "gridX"  : 2,
             "gridY"  : 3,
             "pipe"   : 0,
-            "type"   : 0,
             "rotate" : 1
         }
+    ],
+
+    "R_PIPE" :
+    [
+        {
+            "gridX"  : 5,
+            "gridY"  : 5,
+            "pipe"   : 0,
+            "rotate" : 1
+        }
+    ],
+
+    "S_PIPE" :
+    [
+        {
+            "gridX"  : 5,
+            "gridY"  : 6,
+            "rot1"   : 0,
+            "rot2"   : 0
+        }
+    ],
+
+    "T_PIPE" :
+    [
     ]
 }
