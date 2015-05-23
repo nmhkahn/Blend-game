@@ -13,14 +13,15 @@ class GameScene : public Layer
 {
 public:
     
-    static Scene* createScene( size_t level );
-    static GameScene* create( size_t level );
+    static Scene* createScene( const int& level );
+    static GameScene* create( const int& level );
     
-    virtual bool init( size_t level );
+    virtual bool init( const int& level );
     virtual void onEnter();
     virtual void onExit();
     
     void initLevel();
+    void parseJSON();
     void stageOver();
     void stageClear();
     void changeScene();
@@ -36,12 +37,10 @@ public:
     void updateColor();
     void updateText();
     void clearGrid();
-    
-    void rotatePipe( Pipe* pipe );
-    
+        
 private:
-    Vec2 _origin;
     Size _size;
+    Vec2 _origin;
     Vec2 _center;
     
     // container for sprite
@@ -53,13 +52,10 @@ private:
     // queue for store route to draw pipe
     Vector<Grid*> _route;
     
-    // ui
-    Vector<Text*> _textList;
-    
     // check win condition
     int _clearCond;
         
-    size_t _level;
+    int _level;
 };
 
 #endif
