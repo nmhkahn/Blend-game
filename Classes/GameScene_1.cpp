@@ -1,5 +1,5 @@
 //
-//  Implement Game Logic and 
+//  Implement Flow
 //
 
 #include <iostream>
@@ -190,7 +190,7 @@ void GameScene::draw( ColorNode* start )
     Vector<FiniteTimeAction*> vfta;
     
     vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, _route.front())));
-    vfta.pushBack(DelayTime::create(0.1));
+    vfta.pushBack(DelayTime::create(0.05));
     vfta.pushBack(CallFunc::create([&]()
                                    {
                                        start->_color = Color3B::WHITE;
@@ -203,8 +203,13 @@ void GameScene::draw( ColorNode* start )
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawAction, this, &(*it))));
-        vfta.pushBack(DelayTime::create(0.1));
+        vfta.pushBack(DelayTime::create(0.05));
+    }
+    
+    for( auto it : _route )
+    {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::after, this, &(*it))));
+        vfta.pushBack(DelayTime::create(0.05));
     }
     
     vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateColor, this)));
