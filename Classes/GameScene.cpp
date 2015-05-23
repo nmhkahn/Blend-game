@@ -150,19 +150,20 @@ void GameScene::parseJSON()
     rapidjson::Document document;
     document.Parse<0>(str);
         
-    const rapidjson::Value& nodes  = document["Nodes"];
-    const rapidjson::Value& npipes = document["N_Pipes"];
-    const rapidjson::Value& rpipes = document["R_Pipes"];
-    const rapidjson::Value& spipes = document["S_Pipes"];
-    const rapidjson::Value& tpipes = document["T_Pipes"];
+    const rapidjson::Value& nodes  = document["NODE"];
+    const rapidjson::Value& npipes = document["N_PIPE"];
+    const rapidjson::Value& rpipes = document["R_PIPE"];
+    const rapidjson::Value& spipes = document["S_PIPE"];
+    const rapidjson::Value& tpipes = document["T_PIPE"];
     
     for( int i = 0; i < nodes.Size(); i++ )
     {
         const rapidjson::Value& v = nodes[i];
         
         auto node = ColorNode::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
-        addChild(node);
         node->initColorNode(v["color"].GetInt(), v["entity"].GetInt());
+        
+        addChild(node);
         _grids.pushBack(node);
     }
     
@@ -171,8 +172,9 @@ void GameScene::parseJSON()
         const rapidjson::Value& v = npipes[i];
         
         auto pipe = Pipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
-        addChild(pipe);
         pipe->initPipe(v["pipe"].GetInt(), v["rotate"].GetInt());
+        
+        addChild(pipe);
         _grids.pushBack(pipe);
     }
     
@@ -181,8 +183,10 @@ void GameScene::parseJSON()
         const rapidjson::Value& v = rpipes[i];
         
         auto pipe = RotatablePipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
-        addChild(pipe);
         pipe->initRPipe(v["pipe"].GetInt(), v["rotate"].GetInt());
+        
+        addChild(pipe->_ground);
+        addChild(pipe);
         _grids.pushBack(pipe);
     }
     
@@ -191,8 +195,10 @@ void GameScene::parseJSON()
         const rapidjson::Value& v = spipes[i];
         
         auto pipe = SwitchPipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
+        pipe->initSPipe(v["rot1"].GetInt(), v["rot2"].GetInt());
+        
+        addChild(pipe->_ground);
         addChild(pipe);
-        pipe->initSPipe(v["pipe1"].GetInt(), v["pipe2"].GetInt(), v["rotate"].GetInt());
         _grids.pushBack(pipe);
     }
     
@@ -201,8 +207,10 @@ void GameScene::parseJSON()
         const rapidjson::Value& v = tpipes[i];
         
         auto pipe = TunnelPipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
-        addChild(pipe);
         pipe->initTPipe(v["pipe"].GetInt(), v["type"].GetInt(), v["rotate"].GetInt());
+        
+        addChild(pipe->_tunnel);
+        addChild(pipe);
         _grids.pushBack(pipe);
     }
 }
