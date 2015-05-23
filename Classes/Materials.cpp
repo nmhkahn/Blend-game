@@ -205,7 +205,6 @@ void RotatablePipe::initRPipe( const int& pipeType, const int& rotate )
 void RotatablePipe::rotatePipe()
 {
     ++_rotate %= 4;
-    CCLOG("%d", _rotate);
     setSpriteByRotate();
 }
 
@@ -245,7 +244,10 @@ void SwitchPipe::initSPipe( const int &rotate1, const int &rotate2 )
 
 void SwitchPipe::switchPipe()
 {
-    _pipeType = _switch[++_current%2];
+    _current = ++_current%2;
+    
+    _pipeType = _switch[_current];
+    _rotate = _swtrot[_current];
     setSpriteByRotate();
 }
 
