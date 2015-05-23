@@ -26,6 +26,7 @@ struct Pipe : public Grid
 {
     static Pipe* create( const Vec2& coord );
     void initPipe( const int& pipeType, const int& rotate );
+    void setSpriteByRotate();
     
     int _pipeType;
     int _rotate;
@@ -35,6 +36,7 @@ struct RotatablePipe : public Pipe
 {
     static RotatablePipe* create( const Vec2& coord );
     void initRPipe( const int& pipeType, const int& rotate );
+    void rotatePipe();
     
     Sprite* _ground;
 };
@@ -42,9 +44,12 @@ struct RotatablePipe : public Pipe
 struct SwitchPipe : public Pipe
 {
     static SwitchPipe* create( const Vec2& coord );
-    void initSPipe( const int& pipeType1, const int& pipeType2, const int& rotate );
+    void initSPipe( const int& rotate1, const int& rotate2 );
+    void switchPipe();
     
-    int _pipeType[2];
+    int _switch[2];
+    int _swtrot[2];
+    int _current;
     Sprite* _ground;
 };
 

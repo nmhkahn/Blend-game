@@ -9,7 +9,6 @@ using namespace std;
 bool Grid::init()
 {
     _visit = false;
-    
     return initWithTexture(nullptr, Rect::ZERO );;
 }
 
@@ -82,8 +81,13 @@ void Pipe::initPipe( const int& pipeType, const int& rotate )
     _color = Color3B::WHITE;
     _entity = 0;
     
-    _connect.clear();
+    setSpriteByRotate();
+}
 
+void Pipe::setSpriteByRotate()
+{
+    _connect.clear();
+    
     if( _pipeType == 0 )
     {
         setTexture("res/pipe0.png");
@@ -193,8 +197,16 @@ void RotatablePipe::initRPipe( const int& pipeType, const int& rotate )
 {
     initPipe(pipeType, rotate);
     
-    _ground->setTexture("res/r_ground");
+    _ground = Sprite::create("res/r_ground.png");
     _ground->setPosition(getPosition());
+    _ground->setScale(0.75, 0.75);
+}
+
+void RotatablePipe::rotatePipe()
+{
+    ++_rotate %= 4;
+    CCLOG("%d", _rotate);
+    setSpriteByRotate();
 }
 
 
@@ -219,13 +231,22 @@ SwitchPipe* SwitchPipe::create( const Vec2& coord )
     return pipe;
 }
 
-void SwitchPipe::initSPipe( const int &pipeType1, const int &pipeType2, const int &rotate )
+void SwitchPipe::initSPipe( const int &rotate1, const int &rotate2 )
 {
-    _pipeType[0] = pipeType1, _pipeType[1] = pipeType2;
-    initPipe(_pipeType[0], rotate);
+    _switch[0] = 0, _switch[1] = 1;
+    _swtrot[0] = rotate1, _swtrot[1] = rotate2;
+    _current = 0;
+    initPipe(_switch[0], _swtrot[0]);
     
-    _ground->setTexture("res/s_ground");
+    _ground = Sprite::create("res/s_ground.png");
     _ground->setPosition(getPosition());
+    _ground->setScale(0.75, 0.75);
+}
+
+void SwitchPipe::switchPipe()
+{
+    _pipeType = _switch[++_current%2];
+    setSpriteByRotate();
 }
 
 
@@ -255,6 +276,7 @@ void TunnelPipe::initTPipe( const int &pipeType, const int &type, const int &rot
     _type = type;
     initPipe(pipeType, rotate);
     
-    _tunnel->setTexture("res/t_tunnel");
+    _tunnel = Sprite::create("res/t_tunnel.png");
     _tunnel->setPosition(getPosition());
+    _tunnel->setScale(0.75, 0.75);
 }
