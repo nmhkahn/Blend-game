@@ -1,13 +1,6 @@
 #include "Util.h"
 
-Vec2 CRotate( Vec2 target, float dtheta )
+Vec2 gridToPos( const Vec2& grid )
 {
-    return Vec2(target.x*cosf(dtheta) - target.y*sinf(dtheta),
-                target.x*sinf(dtheta) + target.y*cosf(dtheta));
-}
-
-Vec2 CRotateOnAnchor( Vec2 target, float dtheta, Vec2 anchor )
-{
-    const Vec2 pos = target - anchor;
-    return CRotate(pos, dtheta) - pos;
+    return Vec2(96*grid.x, 96*grid.y);
 }
