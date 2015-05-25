@@ -14,7 +14,7 @@ constexpr const int num_grid_height = 8;
 
 constexpr const int max_level = 5;
 
-constexpr const float flow_speed = 0.1;
+constexpr const float flow_speed = 0.05;
 
 /* util function */
 Vec2 gridToPos( const Vec2& grid );
