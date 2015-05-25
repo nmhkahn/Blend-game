@@ -8,12 +8,12 @@ struct Grid : public Sprite
 {
     virtual bool init();
     
-    Vec2 _coord;                /* grid coordinate */
-    bool _visit;                /* for bfs search */
-    std::vector<Vec2> _connect; /* connected grid */
+    Vec2 _coord;                // grid coordinate
+    bool _visit;                // visit flag for bfs search
+    std::vector<Vec2> _connect; // store connected grid
     
-    Color3B _color;
-    int _entity;
+    Color3B _color;             // carry color
+    int _entity;                // carry color entity
 };
 
 struct ColorNode : public Grid
@@ -28,8 +28,8 @@ struct Pipe : public Grid
     void initPipe( const int& pipeType, const int& rotate );
     void setSpriteByRotate();
     
-    int _pipeType;
-    int _rotate;
+    int _pipeType;  // pipe type : 0, 1, 2, 3
+    int _rotate;    // clockwise : 0, 1, 2, 3
 };
 
 struct RotatablePipe : public Pipe
@@ -38,7 +38,7 @@ struct RotatablePipe : public Pipe
     void initRPipe( const int& pipeType, const int& rotate );
     void rotatePipe();
     
-    Sprite* _ground;
+    Sprite* _ground; // ground sprite
 };
 
 struct SwitchPipe : public Pipe
@@ -47,10 +47,10 @@ struct SwitchPipe : public Pipe
     void initSPipe( const int& rotate1, const int& rotate2 );
     void switchPipe();
     
-    int _switch[2];
-    int _swtrot[2];
-    int _current;
-    Sprite* _ground;
+    int _switch[2];  // store pipe type for each switch
+    int _swtrot[2];  // store rotate for each switch
+    int _current;    // current switch
+    Sprite* _ground; // ground sprite
 };
 
 struct TunnelPipe : public Pipe
@@ -58,9 +58,9 @@ struct TunnelPipe : public Pipe
     static TunnelPipe* create( const Vec2& coord );
     void initTPipe( const Vec2& end, const int& type, const int& rotate );
     
-    int _type;
-    Vec2 _end;
-    Sprite* _tunnel;
+    int _type;       // rotate of tunnel (change of sprite)
+    Vec2 _end;       // coordinate of connected tunnel
+    Sprite* _tunnel; // tunnel sprite
 };
 
 #endif

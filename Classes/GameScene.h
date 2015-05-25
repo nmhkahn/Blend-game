@@ -46,23 +46,17 @@ private:
     Vec2 _origin;
     Vec2 _center;
     
-    // container for sprite
-    Sprite* _background;
-    Vector<Grid*> _grids;
+    Sprite* _background;     // background sprite
+    Vector<Grid*> _grids;    // contain entire grid
     
-    // store adjacent grid
-    Vector<Grid*> _adjacent;
-    // store route to draw pipe
-    Vector<Grid*> _route;
+    Vector<Grid*> _adjacent; // store adjacent grid
+    Vector<Grid*> _route;    // store route to draw pipe
     
-    Vector<Text*> _textList;
+    Vector<Text*> _textList; // test : show entity
     
-    // check win condition
-    int _winLoseCnd;
-    // contain current level
-    int _level;
-    // contain # of color in current level
-    int _numColor;
+    int _winLoseCnd;         // check win condition
+    int _level;              // contain current level
+    int _numColor;           // contain # of color in current level
 };
 
 #endif
