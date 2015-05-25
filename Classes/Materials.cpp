@@ -273,12 +273,56 @@ TunnelPipe* TunnelPipe::create( const Vec2& coord )
     return pipe;
 }
 
-void TunnelPipe::initTPipe( const int &pipeType, const int &type, const int &rotate )
+void TunnelPipe::initTPipe( const Vec2& end, const int& type, const int& rotate )
 {
+    _end = end;
     _type = type;
-    initPipe(pipeType, rotate);
+    initPipe(0, rotate);
     
-    _tunnel = Sprite::create("res/t_tunnel.png");
+    _connect.clear();
+    _connect.push_back(_end);
+    if( _rotate == 0 )
+    {
+        _connect.push_back(Vec2(_coord.x-1, _coord.y));
+    }
+    else if( _rotate == 1 )
+    {
+        _connect.push_back(Vec2(_coord.x, _coord.y+1));
+    }
+    else if( _rotate == 2 )
+    {
+        _connect.push_back(Vec2(_coord.x+1, _coord.y));
+    }
+    else if( _rotate == 3 )
+    {
+        _connect.push_back(Vec2(_coord.x, _coord.y-1));
+    }
+    
+    switch( _type )
+    {
+        case 0:
+        {
+            _tunnel = Sprite::create("res/t_tunnel0.png");
+            break;
+        }
+        case 1:
+        {
+            _tunnel = Sprite::create("res/t_tunnel1.png");
+            break;
+        }
+        case 2:
+        {
+            _tunnel = Sprite::create("res/t_tunne2.png");
+            break;
+        }
+        case 3:
+        {
+            _tunnel = Sprite::create("res/t_tunne3.png");
+            break;
+        }
+    }
+
     _tunnel->setPosition(getPosition());
+    _tunnel->setRotation(90*_rotate);
     _tunnel->setScale(0.75, 0.75);
 }

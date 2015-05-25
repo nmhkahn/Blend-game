@@ -12,7 +12,7 @@ using namespace cocos2d::ui;
 class GameScene : public Layer
 {
 public:
-    
+    /* implement in GameScene.cpp */
     static Scene* createScene( const int& level );
     static GameScene* create( const int& level );
     
@@ -22,22 +22,25 @@ public:
     
     void initLevel();
     void parseJSON();
+    
     void stageOver();
     void stageClear();
     void changeScene();
     
+    /* implement in GameScene_1.cpp */
+    void findAdj( Grid* grid, int& numAdjacent );
+    void flowAdj( Grid* grid, const int& numAdjacent );
     void flow( ColorNode* start );
-    void findAdjacent( Grid* grid, int& numAdjacent );
-    void flowAdjacent( Grid* grid, const int& numAdjacent );
     
-    void draw( ColorNode* start );
-    void drawAction( Node* sender, Grid* grid );
-    void after( Node* sender, Grid* grid );
+    void drawFlow( Node* sender, Grid* grid );
+    void drawColorNode( Node* sender, Grid* grid );
+    void clearToEmpty( Node* sender, Grid* grid );
+    void flowAfter( ColorNode* start );
     
-    void updateColor();
+    void checkWinLose();
+    
     void updateText();
-    void clearGrid();
-        
+    
 private:
     Size _size;
     Vec2 _origin;
@@ -47,15 +50,19 @@ private:
     Sprite* _background;
     Vector<Grid*> _grids;
     
-    // queue for store adjacent grid
-    Vector<Grid*> _queue;
-    // queue for store route to draw pipe
+    // store adjacent grid
+    Vector<Grid*> _adjacent;
+    // store route to draw pipe
     Vector<Grid*> _route;
     
+    Vector<Text*> _textList;
+    
     // check win condition
-    int _clearCond;
-        
+    int _winLoseCnd;
+    // contain current level
     int _level;
+    // contain # of color in current level
+    int _numColor;
 };
 
 #endif

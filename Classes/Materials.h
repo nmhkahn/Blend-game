@@ -56,9 +56,10 @@ struct SwitchPipe : public Pipe
 struct TunnelPipe : public Pipe
 {
     static TunnelPipe* create( const Vec2& coord );
-    void initTPipe( const int& pipeType, const int& type, const int& rotate );
+    void initTPipe( const Vec2& end, const int& type, const int& rotate );
     
     int _type;
+    Vec2 _end;
     Sprite* _tunnel;
 };
 

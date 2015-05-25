@@ -50,7 +50,7 @@ bool GameScene::init( const int& level )
     this->addChild(_background);
     
     _level = level;
-    _clearCond = 0;
+    _winLoseCnd = COND::NONE;
     initLevel();
     
     schedule(CC_SCHEDULE_SELECTOR(GameScene::update));
@@ -63,7 +63,6 @@ void GameScene::onEnter()
     Node::onEnter();
     
     auto listner = EventListenerTouchOneByOne::create();
-    
     listner->setSwallowTouches(true);
     
     listner->onTouchBegan = [&]( Touch* const touch, Event* const event ) -> bool
@@ -92,7 +91,7 @@ void GameScene::onEnter()
                     if( rect.containsPoint(loc) )
                     {
                         flow(node);
-                        draw(node);
+                        flowAfter(node);
                     }
                     break;
                 }
@@ -137,6 +136,22 @@ void GameScene::onExit()
 void GameScene::initLevel()
 {
     parseJSON();
+    
+    // text for help to see entity
+    for( auto it : _grids )
+    {
+        if( (*it).getTag() != TYPE::NODE ) continue;
+        
+        auto node = static_cast<ColorNode*>(it);
+        
+        auto text =  Text::create();
+        text->setPosition(node->getPosition());
+        text->setString(to_string(node->_entity));
+        text->setFontSize(30);
+        
+        _textList.pushBack(text);
+        addChild(text);
+    }
 }
 
 void GameScene::parseJSON()
@@ -149,12 +164,15 @@ void GameScene::parseJSON()
     
     rapidjson::Document document;
     document.Parse<0>(str);
-        
+    
+    const rapidjson::Value& info   = document["INFO"];
     const rapidjson::Value& nodes  = document["NODE"];
     const rapidjson::Value& npipes = document["N_PIPE"];
     const rapidjson::Value& rpipes = document["R_PIPE"];
     const rapidjson::Value& spipes = document["S_PIPE"];
     const rapidjson::Value& tpipes = document["T_PIPE"];
+    
+    _numColor = info["numColor"].GetInt();
     
     for( int i = 0; i < nodes.Size(); i++ )
     {
@@ -207,10 +225,11 @@ void GameScene::parseJSON()
         const rapidjson::Value& v = tpipes[i];
         
         auto pipe = TunnelPipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
-        pipe->initTPipe(v["pipe"].GetInt(), v["type"].GetInt(), v["rotate"].GetInt());
+        pipe->initTPipe(Vec2(v["endX"].GetInt(), v["endY"].GetInt()),
+                        v["type"].GetInt(), v["rotate"].GetInt());
         
-        addChild(pipe->_tunnel);
         addChild(pipe);
+        addChild(pipe->_tunnel);
         _grids.pushBack(pipe);
     }
 }
@@ -222,7 +241,7 @@ void GameScene::stageOver()
 
 void GameScene::stageClear()
 {
-    if( _level < max_stage ) _level++;
+    if( _level < max_level ) _level++;
     changeScene();
 }
                  
