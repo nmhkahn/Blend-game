@@ -12,6 +12,7 @@ enum DIR {UP, DOWN, RIGHT, LEFT};
 constexpr const int num_grid_width = 14;
 constexpr const int num_grid_height = 8;
 
+constexpr const int start_level = 1;
 constexpr const int max_level = 5;
 
 constexpr const float flow_speed = 0.05;
