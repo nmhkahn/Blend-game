@@ -14,6 +14,8 @@ struct Grid : public Sprite
     
     Color3B _color;             // carry color
     int _entity;                // carry color entity
+    
+    Sprite* _back;              // virtual sprite for visual
 };
 
 struct ColorNode : public Grid

@@ -47,7 +47,7 @@ bool GameScene::init( const int& level )
     
     _background = Sprite::create("res/background.png");
     _background->setPosition(_center);
-    this->addChild(_background);
+    this->addChild(_background, 0);
     
     _level = level;
     _winLoseCnd = COND::NONE;
@@ -181,7 +181,8 @@ void GameScene::parseJSON()
         auto node = ColorNode::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
         node->initColorNode(v["color"].GetInt(), v["entity"].GetInt());
         
-        addChild(node);
+        addChild(node, 10);
+        addChild(node->_back, 1);
         _grids.pushBack(node);
     }
     
@@ -192,7 +193,8 @@ void GameScene::parseJSON()
         auto pipe = Pipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
         pipe->initPipe(v["pipe"].GetInt(), v["rotate"].GetInt());
         
-        addChild(pipe);
+        addChild(pipe, 10);
+        addChild(pipe->_back, 1);
         _grids.pushBack(pipe);
     }
     
@@ -203,8 +205,9 @@ void GameScene::parseJSON()
         auto pipe = RotatablePipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
         pipe->initRPipe(v["pipe"].GetInt(), v["rotate"].GetInt());
         
-        addChild(pipe->_ground);
-        addChild(pipe);
+        addChild(pipe, 10);
+        addChild(pipe->_back, 1);
+        addChild(pipe->_ground, 5);
         _grids.pushBack(pipe);
     }
     
@@ -215,8 +218,9 @@ void GameScene::parseJSON()
         auto pipe = SwitchPipe::create(Vec2(v["gridX"].GetInt(), v["gridY"].GetInt()));
         pipe->initSPipe(v["rot1"].GetInt(), v["rot2"].GetInt());
         
-        addChild(pipe->_ground);
-        addChild(pipe);
+        addChild(pipe, 10);
+        addChild(pipe->_back, 1);
+        addChild(pipe->_ground, 5);
         _grids.pushBack(pipe);
     }
     
@@ -228,8 +232,9 @@ void GameScene::parseJSON()
         pipe->initTPipe(Vec2(v["endX"].GetInt(), v["endY"].GetInt()),
                         v["type"].GetInt(), v["rotate"].GetInt());
         
-        addChild(pipe);
-        addChild(pipe->_tunnel);
+        addChild(pipe, 10);
+        addChild(pipe->_back, 1);
+        addChild(pipe->_tunnel, 20);
         _grids.pushBack(pipe);
     }
 }

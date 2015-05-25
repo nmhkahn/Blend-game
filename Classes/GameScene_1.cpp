@@ -46,20 +46,8 @@ void GameScene::flowAdj( Grid* grid, const int& numAdjacent )
     Color3B flowColor;
     
     // set color for next flow
-    if( grid->getTag() == TYPE::NODE )
-    {
-        auto node = static_cast<ColorNode*>(grid);
-        
-        flowEntity = node->_entity / numAdjacent;
-        flowColor = node->_color;
-    }
-    else
-    {
-        auto pipe = static_cast<Pipe*>(grid);
-        
-        flowEntity = pipe->_entity / numAdjacent;
-        flowColor = pipe->_color;
-    }
+    flowEntity = grid->_entity / numAdjacent;
+    flowColor = grid->_color;
     
     for( int i = 0; i < numAdjacent; i++ )
     {
@@ -129,7 +117,7 @@ void GameScene::flow( ColorNode* start )
             _winLoseCnd = COND::L_NOCONN;
             return;
         }
-        // if no adjacent grid, continue
+        // if no adjacent node, continue
         else if( !numAdjacent ) continue;
         
         // flow to adjacent grid
@@ -139,15 +127,19 @@ void GameScene::flow( ColorNode* start )
 
 void GameScene::drawFlow( Node* sender, Grid* grid )
 {
-    if( grid->_color == Color3B::WHITE )
+    // 1. set color and set opacity to 0
+    // 2. set opacity to grid->_entity by action
+    if( grid->getTag() == TYPE::NODE )
     {
-        grid->setOpacity(255);
+        drawColorNode(sender, grid);
     }
     else
     {
-        grid->setOpacity(grid->_entity);
+        grid->setColor(grid->_color);
+        
+        auto fto = FadeTo::create(0.3, grid->_entity);
+        grid->runAction(fto);
     }
-    grid->setColor(grid->_color);
 }
 
 void GameScene::drawColorNode( Node* sender, Grid* grid )
@@ -155,12 +147,12 @@ void GameScene::drawColorNode( Node* sender, Grid* grid )
     // if   entity > 250 && carry something
     // then set entity to 255
     if( grid->_entity > 250 &&
-       grid->_color != Color3B::WHITE )
+        grid->_color != Color3B::WHITE )
     {
         grid->_entity = 255;
         grid->setColor(grid->_color);
         
-        auto fto = FadeTo::create(0.1, grid->_entity);
+        auto fto = FadeTo::create(0.3, grid->_entity);
         grid->runAction(fto);
     }
     
@@ -170,7 +162,7 @@ void GameScene::drawColorNode( Node* sender, Grid* grid )
     {
         grid->_color = Color3B::WHITE;
         grid->setColor(grid->_color);
-        grid->setOpacity(255);
+        grid->setOpacity(0);
     }
 }
 
@@ -179,40 +171,38 @@ void GameScene::clearToEmpty( Node* sender, Grid* grid )
     grid->_entity = 0;
     grid->_color = Color3B::WHITE;
     
-    grid->setOpacity(255);
-    grid->setColor(grid->_color);
+    auto fto = FadeTo::create(0.3, grid->_entity);
+    grid->runAction(fto);
 }
 
 void GameScene::flowAfter( ColorNode* start )
 {
     Vector<FiniteTimeAction*> vfta;
     
-    // pop target node
-    // : only left pipe in _route
-    auto target = _route.back();
+    // popback end node
+    // : easy to implement clearToEmpty action
+    auto end = _route.back();
     _route.popBack();
-    
-    // set pipe carries
+     
+    // draw pipe carries
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, &(*it))));
         vfta.pushBack(DelayTime::create(flow_speed));
     }
-    
-    // draw target node
-    vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawColorNode, this, target)));
-    
-    vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
+    // draw end grid
+    vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, end)));
     
     // clear to empty start node
     vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, start)));
-    
     // set route pipe empty
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, &(*it))));
         vfta.pushBack(DelayTime::create(flow_speed));
     }
+    
+    vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
     
     // clear route for next touch
     vfta.pushBack(CallFunc::create([&]()

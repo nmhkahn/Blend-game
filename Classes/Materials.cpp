@@ -9,7 +9,11 @@ using namespace std;
 bool Grid::init()
 {
     _visit = false;
-    return initWithTexture(nullptr, Rect::ZERO );;
+    _back = Sprite::create();
+    _back->setScale(0.75, 0.75);
+    _back->setColor(Color3B::WHITE);
+    
+    return initWithTexture(nullptr, Rect::ZERO );
 }
 
 
@@ -50,6 +54,9 @@ void ColorNode::initColorNode( const int& color, const int& entity )
     setScale(0.75, 0.75);
     setTag(TYPE::NODE);
     setOpacity(_entity);
+    
+    _back->setTexture("res/node.png");
+    _back->setPosition(getPosition());
 }
 
 
@@ -81,6 +88,9 @@ void Pipe::initPipe( const int& pipeType, const int& rotate )
     _color = Color3B::WHITE;
     _entity = 0;
     
+    setOpacity(_entity);
+    _back->setPosition(getPosition());
+    
     setSpriteByRotate();
 }
 
@@ -91,6 +101,7 @@ void Pipe::setSpriteByRotate()
     if( _pipeType == 0 )
     {
         setTexture("res/pipe0.png");
+        _back->setTexture("res/pipe0.png");
         
         if( _rotate % 2 == 0 )
         {
@@ -106,6 +117,7 @@ void Pipe::setSpriteByRotate()
     else if( _pipeType == 1 )
     {
         setTexture("res/pipe1.png");
+        _back->setTexture("res/pipe1.png");
         
         if( _rotate == 0 )
         {
@@ -131,6 +143,7 @@ void Pipe::setSpriteByRotate()
     else if( _pipeType == 2 )
     {
         setTexture("res/pipe2.png");
+        _back->setTexture("res/pipe2.png");
         
         if( _rotate == 0 )
         {
@@ -161,6 +174,7 @@ void Pipe::setSpriteByRotate()
     else if( _pipeType == 3 )
     {
         setTexture("res/pipe3.png");
+        _back->setTexture("res/pipe3.png");
         
         _connect.push_back(Vec2(_coord.x-1, _coord.y));
         _connect.push_back(Vec2(_coord.x, _coord.y+1));
@@ -169,6 +183,7 @@ void Pipe::setSpriteByRotate()
     }
     
     setRotation(90*_rotate);
+    _back->setRotation(90*_rotate);
 }
 
 
