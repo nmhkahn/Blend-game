@@ -1,4 +1,9 @@
 { 
+    "INFO" :
+    {
+        "numColor" : 2
+    },
+
     "NODE" :
     [
         {
@@ -51,22 +56,10 @@
 
     "R_PIPE" :
     [
-        {
-            "gridX"  : 5,
-            "gridY"  : 5,
-            "pipe"   : 0,
-            "rotate" : 1
-        }
     ],
 
     "S_PIPE" :
     [
-        {
-            "gridX"  : 5,
-            "gridY"  : 6,
-            "rot1"   : 0,
-            "rot2"   : 0
-        }
     ],
 
     "T_PIPE" :
