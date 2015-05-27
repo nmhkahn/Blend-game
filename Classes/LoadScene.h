@@ -13,9 +13,9 @@ public:
     static Scene* createScene( const int& level );
     static LoadScene* create( const int& level );
     
-    virtual bool init( const int& level );
-    virtual void onEnter();
-    virtual void onExit();
+    bool init( const int& level );
+    virtual void onEnter() override;
+    virtual void onExit() override;
     
     void hideIndicator();
     void transitScene();
