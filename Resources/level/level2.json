@@ -8,13 +8,13 @@
     [
         {
             "gridX"  : 2,
-            "gridY"  : 4,
+            "gridY"  : 3,
             "color"  : 2,
             "entity" : 130
         },
         {
             "gridX"  : 7,
-            "gridY"  : 4,
+            "gridY"  : 3,
             "color"  : 2,
             "entity" : 130        
         }
@@ -24,45 +24,45 @@
     [
         {
             "gridX"  : 3,
-            "gridY"  : 4,
+            "gridY"  : 3,
             "pipe"   : 0,
             "rotate" : 0
         },
         {
             "gridX"  : 4,
-            "gridY"  : 5,
+            "gridY"  : 4,
             "pipe"   : 0,
             "rotate" : 1
         },
         {
             "gridX"  : 4,
-            "gridY"  : 3,
+            "gridY"  : 2,
             "pipe"   : 0,
             "rotate" : 1
         },
         
         {
             "gridX"  : 3,
-            "gridY"  : 2,
+            "gridY"  : 1,
             "pipe"   : 0,
             "rotate" : 0
         },
         {
             "gridX"  : 5,
-            "gridY"  : 2,
+            "gridY"  : 1,
             "pipe"   : 0,
             "rotate" : 0
         },
         {
             "gridX"  : 6,
-            "gridY"  : 2,
+            "gridY"  : 1,
             "pipe"   : 0,
             "rotate" : 0
         },
         
         {
             "gridX"  : 7,
-            "gridY"  : 3,
+            "gridY"  : 2,
             "pipe"   : 0,
             "type"   : 10,
             "rotate" : 1
@@ -73,19 +73,19 @@
     [
         {
             "gridX"  : 7,
-            "gridY"  : 2,
+            "gridY"  : 1,
             "pipe"   : 1,
             "rotate" : 0
         },
         {
             "gridX"  : 4,
-            "gridY"  : 2,
+            "gridY"  : 1,
             "pipe"   : 1,
             "rotate" : 3
         },
         {
             "gridX"  : 4,
-            "gridY"  : 4,
+            "gridY"  : 3,
             "pipe"   : 1,
             "rotate" : 0
         }
