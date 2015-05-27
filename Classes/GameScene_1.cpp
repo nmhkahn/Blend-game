@@ -52,34 +52,22 @@ void GameScene::flowAdj( Grid* grid, const int& numAdjacent )
     for( int i = 0; i < numAdjacent; i++ )
     {
         // set color of lastest grid
-        auto grid = _adjacent.at(_adjacent.size()-1-i);
+        auto near = _adjacent.at(_adjacent.size()-1-i);
         
-        if( grid->getTag() == TYPE::NODE )
+        if( near->_color == Color3B::WHITE )
         {
-            auto node = static_cast<ColorNode*>(grid);
-            
-            if( node->_color == Color3B::WHITE )
-            {
-                node->_entity = flowEntity;
-                node->_color = flowColor;
-            }
-            // check lose condition
-            // 1. blend with other color
-            else if( node->_color != flowColor )
-            {
-                _winLoseCnd = COND::L_BLEND;
-            }
-            else
-            {
-                node->_entity += flowEntity;
-            }
+            near->_color = flowColor;
+        }
+        
+        // check lose condition
+        // 1. blend with other color
+        if( near->_color != flowColor )
+        {
+            _winLoseCnd = COND::L_BLEND;
         }
         else
         {
-            auto pipe = static_cast<Pipe*>(grid);
-            
-            pipe->_entity = flowEntity;
-            pipe->_color = flowColor;
+            near->_entity += flowEntity;
         }
     }
 }
@@ -88,7 +76,6 @@ void GameScene::flow( ColorNode* start )
 {
     start->_visit = true;
     _adjacent.pushBack(start);
-    _route.pushBack(start);
     
     // path finding : BFS
     while( !_adjacent.empty() )
@@ -101,6 +88,7 @@ void GameScene::flow( ColorNode* start )
         
         // if poped-one is node (not start node)
         // then stop flow
+        
         if( grid->_coord != start->_coord &&
             grid->getTag() == TYPE::NODE )
         {
@@ -112,7 +100,7 @@ void GameScene::flow( ColorNode* start )
         // check lose condition
         // 1. no connected grid
         if( !numAdjacent &&
-           grid->getTag() != TYPE::NODE )
+            grid->getTag() != TYPE::NODE )
         {
             _winLoseCnd = COND::L_NOCONN;
             return;
@@ -155,14 +143,20 @@ void GameScene::drawColorNode( Node* sender, Grid* grid )
         auto fto = FadeTo::create(0.3, grid->_entity);
         grid->runAction(fto);
     }
-    
     // if   entity == 0 (not carry)
     // then set color to white
-    if( grid->_entity == 0 )
+    else if( grid->_entity == 0 )
     {
         grid->_color = Color3B::WHITE;
         grid->setColor(grid->_color);
         grid->setOpacity(0);
+    }
+    else
+    {
+        grid->setColor(grid->_color);
+        
+        auto fto = FadeTo::create(0.3, grid->_entity);
+        grid->runAction(fto);
     }
 }
 
@@ -178,27 +172,42 @@ void GameScene::clearToEmpty( Node* sender, Grid* grid )
 void GameScene::flowAfter( ColorNode* start )
 {
     Vector<FiniteTimeAction*> vfta;
+    Vector<Grid*> ends;
     
     // popback end node
     // : easy to implement clearToEmpty action
-    auto end = _route.back();
-    _route.popBack();
-     
+    for( auto it = _route.begin(); it != _route.end(); )
+    {
+        if( (*it)->getTag() == TYPE::NODE )
+        {
+            ends.pushBack((*it));
+            it = _route.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
+    
     // draw pipe carries
     for( auto it : _route )
     {
-        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, &(*it))));
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, it)));
         vfta.pushBack(DelayTime::create(flow_speed));
     }
     // draw end grid
-    vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, end)));
+    for( auto it : ends )
+    {
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, it)));
+    }
+    vfta.pushBack(DelayTime::create(0.3));
     
     // clear to empty start node
     vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, start)));
-    // set route pipe empty
+    // draw route pipe empty
     for( auto it : _route )
     {
-        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, &(*it))));
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, it)));
         vfta.pushBack(DelayTime::create(flow_speed));
     }
     

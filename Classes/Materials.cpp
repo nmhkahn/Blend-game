@@ -43,6 +43,7 @@ void ColorNode::initColorNode( const int& color, const int& entity )
     if( color == COLOR::YELLOW) _color = Color3B::YELLOW, setColor(Color3B::YELLOW);
     if( color == COLOR::MAGENTA) _color = Color3B::MAGENTA, setColor(Color3B::MAGENTA);
     if( color == COLOR::ORANGE) _color = Color3B::ORANGE, setColor(Color3B::ORANGE);
+    if( color == COLOR::WHITE) _color = Color3B::WHITE, setColor(Color3B::WHITE);
     _entity = entity;
     
     _connect.push_back(Vec2(_coord.x+1, _coord.y));
@@ -327,12 +328,12 @@ void TunnelPipe::initTPipe( const Vec2& end, const int& type, const int& rotate 
         }
         case 2:
         {
-            _tunnel = Sprite::create("res/t_tunne2.png");
+            _tunnel = Sprite::create("res/t_tunnel2.png");
             break;
         }
         case 3:
         {
-            _tunnel = Sprite::create("res/t_tunne3.png");
+            _tunnel = Sprite::create("res/t_tunnel3.png");
             break;
         }
     }

@@ -147,10 +147,11 @@ void GameScene::initLevel()
         auto text =  Text::create();
         text->setPosition(node->getPosition());
         text->setString(to_string(node->_entity));
+        text->setColor(Color3B::BLACK);
         text->setFontSize(30);
         
         _textList.pushBack(text);
-        addChild(text);
+        addChild(text, 100);
     }
 }
 
@@ -161,6 +162,9 @@ void GameScene::parseJSON()
         
     auto futil = FileUtils::getInstance();
     auto str = (futil->getStringFromFile(path)).data();
+    
+    //CCLOG("%s", path.data());
+    //CCLOG("%s", str);
     
     rapidjson::Document document;
     document.Parse<0>(str);
@@ -197,7 +201,7 @@ void GameScene::parseJSON()
         addChild(pipe->_back, 1);
         _grids.pushBack(pipe);
     }
-    
+        
     for( int i = 0; i < rpipes.Size(); i++ )
     {
         const rapidjson::Value& v = rpipes[i];

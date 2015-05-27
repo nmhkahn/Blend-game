@@ -5,15 +5,15 @@
 USING_NS_CC;
 
 enum TYPE {NODE = 0, N_PIPE = 10, R_PIPE = 20, S_PIPE = 30, T_PIPE = 40};
-enum COLOR {RED, BLUE, GREEN, YELLOW, MAGENTA, ORANGE};
+enum COLOR {RED = 0, BLUE = 1, GREEN = 2, YELLOW = 3, MAGENTA = 4, ORANGE = 5, WHITE = 6};
 enum COND {NONE, WIN, L_BLEND, L_NOCONN, L_TOTAL};
 enum DIR {UP, DOWN, RIGHT, LEFT};
 
-constexpr const int num_grid_width = 14;
-constexpr const int num_grid_height = 8;
+constexpr const int num_grid_width = 13;
+constexpr const int num_grid_height = 7;
 
-constexpr const int start_level = 1;
-constexpr const int max_level = 5;
+constexpr const int start_level = 7;
+constexpr const int max_level = 7;
 
 constexpr const float flow_speed = 0.05;
 
