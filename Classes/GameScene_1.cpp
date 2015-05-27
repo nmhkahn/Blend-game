@@ -14,6 +14,9 @@ void GameScene::findAdj( Grid* grid, int& numAdjacent )
     // for-all grids
     for( auto it : _grids )
     {
+        if( grid->getTag() == TYPE::NODE &&
+            it->getTag() == TYPE::NODE ) continue;
+        
         // for-all connected-grid of start's
         for( auto it2 : grid->_connect )
         {
@@ -125,7 +128,7 @@ void GameScene::drawFlow( Node* sender, Grid* grid )
     {
         grid->setColor(grid->_color);
         
-        auto fto = FadeTo::create(0.3, grid->_entity);
+        auto fto = FadeTo::create(0.4, grid->_entity);
         grid->runAction(fto);
     }
 }
@@ -140,7 +143,7 @@ void GameScene::drawColorNode( Node* sender, Grid* grid )
         grid->_entity = 255;
         grid->setColor(grid->_color);
         
-        auto fto = FadeTo::create(0.3, grid->_entity);
+        auto fto = FadeTo::create(0.4, grid->_entity);
         grid->runAction(fto);
     }
     // if   entity == 0 (not carry)
@@ -155,7 +158,7 @@ void GameScene::drawColorNode( Node* sender, Grid* grid )
     {
         grid->setColor(grid->_color);
         
-        auto fto = FadeTo::create(0.3, grid->_entity);
+        auto fto = FadeTo::create(0.4, grid->_entity);
         grid->runAction(fto);
     }
 }
@@ -200,7 +203,7 @@ void GameScene::flowAfter( ColorNode* start )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, it)));
     }
-    vfta.pushBack(DelayTime::create(0.3));
+    vfta.pushBack(DelayTime::create(0.2));
     
     // clear to empty start node
     vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, start)));
@@ -208,10 +211,10 @@ void GameScene::flowAfter( ColorNode* start )
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, it)));
-        vfta.pushBack(DelayTime::create(flow_speed));
+        vfta.pushBack(DelayTime::create(0.05));
     }
     
-    vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
+    //vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
     
     // clear route for next touch
     vfta.pushBack(CallFunc::create([&]()

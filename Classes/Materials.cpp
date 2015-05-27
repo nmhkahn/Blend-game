@@ -37,13 +37,13 @@ ColorNode* ColorNode::create( const Vec2& coord )
 
 void ColorNode::initColorNode( const int& color, const int& entity )
 {
-    if( color == COLOR::RED) _color = Color3B::RED, setColor(Color3B::RED);
-    if( color == COLOR::BLUE) _color = Color3B::BLUE, setColor(Color3B::BLUE);
-    if( color == COLOR::GREEN) _color = Color3B::GREEN, setColor(Color3B::GREEN);
-    if( color == COLOR::YELLOW) _color = Color3B::YELLOW, setColor(Color3B::YELLOW);
+    if( color == COLOR::RED)     _color = Color3B::RED,     setColor(Color3B::RED);
+    if( color == COLOR::BLUE)    _color = Color3B::BLUE,    setColor(Color3B::BLUE);
+    if( color == COLOR::GREEN)   _color = Color3B::GREEN,   setColor(Color3B::GREEN);
+    if( color == COLOR::YELLOW)  _color = Color3B::YELLOW,  setColor(Color3B::YELLOW);
     if( color == COLOR::MAGENTA) _color = Color3B::MAGENTA, setColor(Color3B::MAGENTA);
-    if( color == COLOR::ORANGE) _color = Color3B::ORANGE, setColor(Color3B::ORANGE);
-    if( color == COLOR::WHITE) _color = Color3B::WHITE, setColor(Color3B::WHITE);
+    if( color == COLOR::ORANGE)  _color = Color3B::ORANGE,  setColor(Color3B::ORANGE);
+    if( color == COLOR::WHITE)   _color = Color3B::WHITE,   setColor(Color3B::WHITE);
     _entity = entity;
     
     _connect.push_back(Vec2(_coord.x+1, _coord.y));
@@ -297,46 +297,16 @@ void TunnelPipe::initTPipe( const Vec2& end, const int& type, const int& rotate 
     
     _connect.clear();
     _connect.push_back(_end);
-    if( _rotate == 0 )
-    {
-        _connect.push_back(Vec2(_coord.x-1, _coord.y));
-    }
-    else if( _rotate == 1 )
-    {
-        _connect.push_back(Vec2(_coord.x, _coord.y+1));
-    }
-    else if( _rotate == 2 )
-    {
-        _connect.push_back(Vec2(_coord.x+1, _coord.y));
-    }
-    else if( _rotate == 3 )
-    {
-        _connect.push_back(Vec2(_coord.x, _coord.y-1));
-    }
     
-    switch( _type )
-    {
-        case 0:
-        {
-            _tunnel = Sprite::create("res/t_tunnel0.png");
-            break;
-        }
-        case 1:
-        {
-            _tunnel = Sprite::create("res/t_tunnel1.png");
-            break;
-        }
-        case 2:
-        {
-            _tunnel = Sprite::create("res/t_tunnel2.png");
-            break;
-        }
-        case 3:
-        {
-            _tunnel = Sprite::create("res/t_tunnel3.png");
-            break;
-        }
-    }
+    if( _rotate == 0 )      _connect.push_back(Vec2(_coord.x-1, _coord.y));
+    else if( _rotate == 1 ) _connect.push_back(Vec2(_coord.x, _coord.y+1));
+    else if( _rotate == 2 ) _connect.push_back(Vec2(_coord.x+1, _coord.y));
+    else if( _rotate == 3 ) _connect.push_back(Vec2(_coord.x, _coord.y-1));
+    
+    if( _type == 0 )      _tunnel = Sprite::create("res/t_tunnel0.png");
+    else if( _type == 1 ) _tunnel = Sprite::create("res/t_tunnel1.png");
+    else if( _type == 2 ) _tunnel = Sprite::create("res/t_tunnel2.png");
+    else if( _type == 3 ) _tunnel = Sprite::create("res/t_tunnel3.png");
 
     _tunnel->setPosition(getPosition());
     _tunnel->setRotation(90*_rotate);

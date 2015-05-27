@@ -161,13 +161,14 @@ void GameScene::parseJSON()
     string path  = "level/level"+level+".json";
         
     auto futil = FileUtils::getInstance();
-    auto str = (futil->getStringFromFile(path)).data();
+    auto str = (futil->getStringFromFile(path));
     
-    //CCLOG("%s", path.data());
-    //CCLOG("%s", str);
+    CCLOG("%s", path.data());
+    CCLOG("cnt : %lu", str.size());
+    CCLOG("%s", str.data());
     
     rapidjson::Document document;
-    document.Parse<0>(str);
+    document.Parse<0>(str.data());
     
     const rapidjson::Value& info   = document["INFO"];
     const rapidjson::Value& nodes  = document["NODE"];
@@ -262,4 +263,9 @@ void GameScene::changeScene()
                                     Director::getInstance()->replaceScene(LoadScene::createScene(_level));
                                 }), nullptr);
     runAction(seq);
+}
+
+void GameScene::update( float dt )
+{
+    updateText();
 }

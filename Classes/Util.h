@@ -12,10 +12,10 @@ enum DIR {UP, DOWN, RIGHT, LEFT};
 constexpr const int num_grid_width = 13;
 constexpr const int num_grid_height = 7;
 
-constexpr const int start_level = 7;
-constexpr const int max_level = 7;
+constexpr const int start_level = 1;
+constexpr const int max_level = 9;
 
-constexpr const float flow_speed = 0.05;
+constexpr const float flow_speed = 0.1;
 
 /* util function */
 Vec2 gridToPos( const Vec2& grid );
