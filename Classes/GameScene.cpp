@@ -78,13 +78,13 @@ void GameScene::onEnter()
     {
         Vec2 loc = touch->getLocation();
         
-        for( auto iter : _grids )
+        for( auto it : _grids )
         {
-            switch( (*iter).getTag() )
+            switch( it->getTag() )
             {
                 case TYPE::NODE:
                 {
-                    auto node = static_cast<ColorNode*>(iter);
+                    auto node = static_cast<ColorNode*>(it);
                     if( node->_color == Color3B::WHITE ) continue;
                     
                     auto rect = node->getBoundingBox();
@@ -97,20 +97,20 @@ void GameScene::onEnter()
                 }
                 case TYPE::R_PIPE:
                 {
-                    auto rect = (*iter).getBoundingBox();
+                    auto rect = it->getBoundingBox();
                     if( rect.containsPoint(loc) )
                     {
-                        auto pipe = static_cast<RotatablePipe*>(iter);
+                        auto pipe = static_cast<RotatablePipe*>(it);
                         pipe->rotatePipe();
                     }
                     break;
                 }
                 case TYPE::S_PIPE:
                 {
-                    auto rect = (*iter).getBoundingBox();
+                    auto rect = it->getBoundingBox();
                     if( rect.containsPoint(loc) )
                     {
-                        auto pipe = static_cast<SwitchPipe*>(iter);
+                        auto pipe = static_cast<SwitchPipe*>(it);
                         pipe->switchPipe();
                     }
                     break;
@@ -140,7 +140,7 @@ void GameScene::initLevel()
     // text for help to see entity
     for( auto it : _grids )
     {
-        if( (*it).getTag() != TYPE::NODE ) continue;
+        if( it->getTag() != TYPE::NODE ) continue;
         
         auto node = static_cast<ColorNode*>(it);
         

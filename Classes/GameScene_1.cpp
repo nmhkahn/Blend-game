@@ -22,18 +22,18 @@ void GameScene::findAdj( Grid* grid, int& numAdjacent )
         {
             // if target is not visited &&
             // is connect to start -> target
-            if( !(*it)._visit &&
-               (*it)._coord == it2 )
+            if( !it->_visit &&
+                it->_coord == it2 )
             {
                 // for-all connected-grid of target's
-                for( auto it3 : (*it)._connect )
+                for( auto it3 : it->_connect )
                 {
                     // if connect to target -> start
                     if( grid->_coord == it3 )
                     {
-                        (*it)._visit = true;
-                        _adjacent.pushBack(&(*it));
-                        _route.pushBack(&(*it));
+                        it->_visit = true;
+                        _adjacent.pushBack(it);
+                        _route.pushBack(it);
                         numAdjacent++;
                     }
                 }
@@ -222,7 +222,7 @@ void GameScene::flowAfter( ColorNode* start )
                                        _route.clear();
                                        for( auto it : _grids )
                                        {
-                                           (*it)._visit = false;
+                                           it->_visit = false;
                                        }
                                    }));
     // check win/lose state
@@ -242,7 +242,7 @@ void GameScene::checkWinLose()
     
     for( auto it : _grids )
     {
-        if( (*it).getTag() != TYPE::NODE ) continue;
+        if( it->getTag() != TYPE::NODE ) continue;
         auto node = static_cast<ColorNode*>(it);
         
         if( node->_color != Color3B::WHITE )
@@ -298,7 +298,7 @@ void GameScene::updateText()
 {
     for( auto it : _grids )
     {
-        if( (*it).getTag() != TYPE::NODE ) continue;
+        if( it->getTag() != TYPE::NODE ) continue;
         auto node = static_cast<ColorNode*>(it);
         
         string entity = to_string(node->_entity);
