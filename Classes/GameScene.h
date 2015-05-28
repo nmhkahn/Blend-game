@@ -30,13 +30,13 @@ public:
     void changeScene();
     
     /* implement in GameScene_1.cpp */
-    void findAdj( Grid* grid, int& numAdjacent );
-    void flowAdj( Grid* grid, const int& numAdjacent );
+    void findAdj( Grid* curr, int& numAdjacent );
+    void flowAdj( Grid* curr, const int& numAdjacent );
     void flow( ColorNode* start );
     
-    void drawFlow( Node* sender, Grid* grid );
-    void drawColorNode( Node* sender, Grid* grid );
-    void clearToEmpty( Node* sender, Grid* grid );
+    void drawFlow( Node* sender, Grid* curr );
+    void drawColorNode( Node* sender, Grid* curr );
+    void clearToEmpty( Node* sender, Grid* curr );
     void flowAfter( ColorNode* start );
     
     void checkWinLose();

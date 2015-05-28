@@ -8,7 +8,7 @@ using namespace std;
 /* GRID */
 bool Grid::init()
 {
-    _visit = false;
+    _before = nullptr;
     _back = Sprite::create();
     _back->setScale(0.75, 0.75);
     _back->setColor(Color3B::WHITE);

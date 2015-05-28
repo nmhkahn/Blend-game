@@ -9,7 +9,7 @@ struct Grid : public Sprite
     virtual bool init();
     
     Vec2 _coord;                // grid coordinate
-    bool _visit;                // visit flag for bfs search
+    Grid* _before;              // store grid visited before
     std::vector<Vec2> _connect; // store connected grid
     
     Color3B _color;             // carry color

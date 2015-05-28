@@ -163,9 +163,11 @@ void GameScene::parseJSON()
     auto futil = FileUtils::getInstance();
     auto str = (futil->getStringFromFile(path));
     
+    /*
     CCLOG("%s", path.data());
     CCLOG("cnt : %lu", str.size());
     CCLOG("%s", str.data());
+    */
     
     rapidjson::Document document;
     document.Parse<0>(str.data());

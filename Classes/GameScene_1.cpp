@@ -8,30 +8,32 @@ using namespace std;
 #include "GameScene.h"
 #include "Util.h"
 
-void GameScene::findAdj( Grid* grid, int& numAdjacent )
+void GameScene::findAdj( Grid* curr, int& numAdjacent )
 {
     // find adjacent grid of pop_back one's
     // for-all grids
     for( auto it : _grids )
     {
-        if( grid->getTag() == TYPE::NODE &&
+        if( curr->getTag() == TYPE::NODE &&
             it->getTag() == TYPE::NODE ) continue;
         
         // for-all connected-grid of start's
-        for( auto it2 : grid->_connect )
+        for( auto it2 : curr->_connect )
         {
             // if target is not visited &&
             // is connect to start -> target
-            if( !it->_visit &&
+            //if( !it->_visit &&
+            //    it->_coord == it2 )
+            if( it != curr->_before &&
                 it->_coord == it2 )
             {
                 // for-all connected-grid of target's
                 for( auto it3 : it->_connect )
                 {
                     // if connect to target -> start
-                    if( grid->_coord == it3 )
+                    if( curr->_coord == it3 )
                     {
-                        it->_visit = true;
+                        it->_before = curr;
                         _adjacent.pushBack(it);
                         _route.pushBack(it);
                         numAdjacent++;
@@ -42,15 +44,15 @@ void GameScene::findAdj( Grid* grid, int& numAdjacent )
     }
 }
 
-void GameScene::flowAdj( Grid* grid, const int& numAdjacent )
+void GameScene::flowAdj( Grid* curr, const int& numAdjacent )
 {
     // variable for next flow
     int flowEntity;
     Color3B flowColor;
     
     // set color for next flow
-    flowEntity = grid->_entity / numAdjacent;
-    flowColor = grid->_color;
+    flowEntity = curr->_entity / numAdjacent;
+    flowColor = curr->_color;
     
     for( int i = 0; i < numAdjacent; i++ )
     {
@@ -77,14 +79,14 @@ void GameScene::flowAdj( Grid* grid, const int& numAdjacent )
 
 void GameScene::flow( ColorNode* start )
 {
-    start->_visit = true;
+    //start->_visit = true;
     _adjacent.pushBack(start);
     
     // path finding : BFS
     while( !_adjacent.empty() )
     {
         int numAdjacent = 0;
-        auto grid = _adjacent.front();
+        auto curr = _adjacent.front();
         
         // same as pop_back
         _adjacent.erase(_adjacent.begin());
@@ -92,18 +94,15 @@ void GameScene::flow( ColorNode* start )
         // if poped-one is node (not start node)
         // then stop flow
         
-        if( grid->_coord != start->_coord &&
-            grid->getTag() == TYPE::NODE )
-        {
-            continue;
-        }
+        if( curr->_coord != start->_coord &&
+           curr->getTag() == TYPE::NODE ) continue;
         
-        findAdj(grid, numAdjacent);
+        findAdj(curr, numAdjacent);
         
         // check lose condition
         // 1. no connected grid
         if( !numAdjacent &&
-            grid->getTag() != TYPE::NODE )
+            curr->getTag() != TYPE::NODE )
         {
             _winLoseCnd = COND::L_NOCONN;
             return;
@@ -112,64 +111,64 @@ void GameScene::flow( ColorNode* start )
         else if( !numAdjacent ) continue;
         
         // flow to adjacent grid
-        flowAdj(grid, numAdjacent);
+        flowAdj(curr, numAdjacent);
     }
 }
 
-void GameScene::drawFlow( Node* sender, Grid* grid )
+void GameScene::drawFlow( Node* sender, Grid* curr )
 {
     // 1. set color and set opacity to 0
     // 2. set opacity to grid->_entity by action
-    if( grid->getTag() == TYPE::NODE )
+    if( curr->getTag() == TYPE::NODE )
     {
-        drawColorNode(sender, grid);
+        drawColorNode(sender, curr);
     }
     else
     {
-        grid->setColor(grid->_color);
+        curr->setColor(curr->_color);
         
-        auto fto = FadeTo::create(0.4, grid->_entity);
-        grid->runAction(fto);
+        auto fto = FadeTo::create(0.4, curr->_entity);
+        curr->runAction(fto);
     }
 }
 
-void GameScene::drawColorNode( Node* sender, Grid* grid )
+void GameScene::drawColorNode( Node* sender, Grid* curr )
 {
     // if   entity > 250 && carry something
     // then set entity to 255
-    if( grid->_entity > 250 &&
-        grid->_color != Color3B::WHITE )
+    if( curr->_entity > 250 &&
+        curr->_color != Color3B::WHITE )
     {
-        grid->_entity = 255;
-        grid->setColor(grid->_color);
+        curr->_entity = 255;
+        curr->setColor(curr->_color);
         
-        auto fto = FadeTo::create(0.4, grid->_entity);
-        grid->runAction(fto);
+        auto fto = FadeTo::create(0.4, curr->_entity);
+        curr->runAction(fto);
     }
     // if   entity == 0 (not carry)
     // then set color to white
-    else if( grid->_entity == 0 )
+    else if( curr->_entity == 0 )
     {
-        grid->_color = Color3B::WHITE;
-        grid->setColor(grid->_color);
-        grid->setOpacity(0);
+        curr->_color = Color3B::WHITE;
+        curr->setColor(curr->_color);
+        curr->setOpacity(0);
     }
     else
     {
-        grid->setColor(grid->_color);
+        curr->setColor(curr->_color);
         
-        auto fto = FadeTo::create(0.4, grid->_entity);
-        grid->runAction(fto);
+        auto fto = FadeTo::create(0.4, curr->_entity);
+        curr->runAction(fto);
     }
 }
 
-void GameScene::clearToEmpty( Node* sender, Grid* grid )
+void GameScene::clearToEmpty( Node* sender, Grid* curr )
 {
-    grid->_entity = 0;
-    grid->_color = Color3B::WHITE;
+    curr->_entity = 0;
+    curr->_color = Color3B::WHITE;
     
-    auto fto = FadeTo::create(0.3, grid->_entity);
-    grid->runAction(fto);
+    auto fto = FadeTo::create(0.3, curr->_entity);
+    curr->runAction(fto);
 }
 
 void GameScene::flowAfter( ColorNode* start )
@@ -222,7 +221,8 @@ void GameScene::flowAfter( ColorNode* start )
                                        _route.clear();
                                        for( auto it : _grids )
                                        {
-                                           it->_visit = false;
+                                           it->_before = nullptr;
+                                           //it->_visit = false;
                                        }
                                    }));
     // check win/lose state
