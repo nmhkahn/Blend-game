@@ -1,7 +1,7 @@
-using namespace std;
-
 #include "LoadScene.h"
 #include "GameScene.h"
+
+#include "Util.h"
 
 Scene* LoadScene::createScene( const int& level )
 {
@@ -46,7 +46,7 @@ bool LoadScene::init( const int& level )
     
     _indicator = Text::create();
     _indicator->setPosition(_center);
-    _indicator->setString(to_string(_level));
+    _indicator->setString(int_to_string(_level));
     _indicator->setFontSize(50);
     this->addChild(_indicator);
     

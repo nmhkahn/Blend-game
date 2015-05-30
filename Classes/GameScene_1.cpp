@@ -14,6 +14,7 @@ void GameScene::findAdj( Grid* curr, int& numAdjacent )
     // for-all grids
     for( auto it : _grids )
     {
+        // if two nodes are adjacent, ignore them
         if( curr->getTag() == TYPE::NODE &&
             it->getTag() == TYPE::NODE ) continue;
         
@@ -22,8 +23,6 @@ void GameScene::findAdj( Grid* curr, int& numAdjacent )
         {
             // if target is not visited &&
             // is connect to start -> target
-            //if( !it->_visit &&
-            //    it->_coord == it2 )
             if( it != curr->_before &&
                 it->_coord == it2 )
             {
@@ -79,7 +78,6 @@ void GameScene::flowAdj( Grid* curr, const int& numAdjacent )
 
 void GameScene::flow( ColorNode* start )
 {
-    //start->_visit = true;
     _adjacent.pushBack(start);
     
     // path finding : BFS
@@ -88,12 +86,11 @@ void GameScene::flow( ColorNode* start )
         int numAdjacent = 0;
         auto curr = _adjacent.front();
         
-        // same as pop_back
+        // same as pop_front
         _adjacent.erase(_adjacent.begin());
         
         // if poped-one is node (not start node)
         // then stop flow
-        
         if( curr->_coord != start->_coord &&
            curr->getTag() == TYPE::NODE ) continue;
         
@@ -301,7 +298,7 @@ void GameScene::updateText()
         if( it->getTag() != TYPE::NODE ) continue;
         auto node = static_cast<ColorNode*>(it);
         
-        string entity = to_string(node->_entity);
+        string entity = int_to_string(node->_entity);
         
         for( auto it2 : _textList )
         {

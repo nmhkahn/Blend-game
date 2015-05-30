@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-#include "cocosGUI.h"
+#include "ui/CocosGUI.h"
 using namespace cocos2d::ui;
 
 class LoadScene : public Layer

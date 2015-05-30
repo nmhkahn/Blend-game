@@ -146,7 +146,7 @@ void GameScene::initLevel()
         
         auto text =  Text::create();
         text->setPosition(node->getPosition());
-        text->setString(to_string(node->_entity));
+        text->setString(int_to_string(node->_entity));
         text->setColor(Color3B::BLACK);
         text->setFontSize(30);
         
@@ -157,7 +157,7 @@ void GameScene::initLevel()
 
 void GameScene::parseJSON()
 {
-    string level = to_string(_level);
+    string level = int_to_string(_level);
     string path  = "level/level"+level+".json";
         
     auto futil = FileUtils::getInstance();
