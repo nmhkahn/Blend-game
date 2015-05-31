@@ -17,13 +17,18 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
     
+    void initUI();
+    
     void hideIndicator();
     void transitScene();
+    void changeScene();
     
 private:
     Size _size;
     Vec2 _origin;
     Vec2 _center;
+    
+    Sprite* _prev, *_next;
     
     Sprite* _background;
     Text* _indicator;

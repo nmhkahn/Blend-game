@@ -78,6 +78,22 @@ void GameScene::onEnter()
     {
         Vec2 loc = touch->getLocation();
         
+        // when touched buttons
+        if( _prev != nullptr &&
+            _prev->getBoundingBox().containsPoint(loc) )
+        {
+            _level--;
+            changeScene();
+        }
+        
+        if( _next != nullptr &&
+            _next->getBoundingBox().containsPoint(loc) )
+        {
+            _level++;
+            changeScene();
+        }
+        
+        // when touched grids
         for( auto it : _grids )
         {
             switch( it->getTag() )
@@ -119,10 +135,6 @@ void GameScene::onEnter()
         }
     };
     
-    listner->onTouchCancelled = [&]( Touch* const touch, Event* const event )
-    {
-    };
-    
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listner, 1);
 }
 
@@ -135,6 +147,7 @@ void GameScene::onExit()
 
 void GameScene::initLevel()
 {
+    initUI();
     parseJSON();
     
     // text for help to see entity
@@ -155,6 +168,36 @@ void GameScene::initLevel()
     }
 }
 
+void GameScene::initUI()
+{
+    if( _level == 1 )
+    {
+        _prev = nullptr;
+        _next = Sprite::create("res/node.png");
+        _next->setPosition(_size.width-30, _size.height-30);
+        
+        addChild(_next);
+    }
+    else if( _level == max_level )
+    {
+        _prev = Sprite::create("res/node.png");
+        _prev->setPosition(30, _size.height-30);
+        _next = nullptr;
+        
+        addChild(_prev);
+    }
+    else
+    {
+        _prev = Sprite::create("res/node.png");
+        _prev->setPosition(30, _size.height-30);
+        _next = Sprite::create("res/node.png");
+        _next->setPosition(_size.width-30, _size.height-30);
+        
+        addChild(_prev);
+        addChild(_next);
+    }
+}
+
 void GameScene::parseJSON()
 {
     string level = int_to_string(_level);
@@ -162,12 +205,6 @@ void GameScene::parseJSON()
         
     auto futil = FileUtils::getInstance();
     auto str = (futil->getStringFromFile(path));
-    
-    /*
-    CCLOG("%s", path.data());
-    CCLOG("cnt : %lu", str.size());
-    CCLOG("%s", str.data());
-    */
     
     rapidjson::Document document;
     document.Parse<0>(str.data());

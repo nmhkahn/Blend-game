@@ -8,6 +8,21 @@ using namespace std;
 #include "GameScene.h"
 #include "Util.h"
 
+void GameScene::connectToOther( Grid *from, Grid *to, int& numAdjacent )
+{
+    for( auto it : to->_connect )
+    {
+        // if connect to target -> start
+        if( from->_coord == it )
+        {
+            to->_before = from;
+            _adjacent.pushBack(to);
+            _route.pushBack(to);
+            numAdjacent++;
+        }
+    }
+}
+
 void GameScene::findAdj( Grid* curr, int& numAdjacent )
 {
     // find adjacent grid of pop_back one's
@@ -26,18 +41,7 @@ void GameScene::findAdj( Grid* curr, int& numAdjacent )
             if( it != curr->_before &&
                 it->_coord == it2 )
             {
-                // for-all connected-grid of target's
-                for( auto it3 : it->_connect )
-                {
-                    // if connect to target -> start
-                    if( curr->_coord == it3 )
-                    {
-                        it->_before = curr;
-                        _adjacent.pushBack(it);
-                        _route.pushBack(it);
-                        numAdjacent++;
-                    }
-                }
+                connectToOther(curr, it, numAdjacent);
             }
         }
     }
@@ -124,7 +128,7 @@ void GameScene::drawFlow( Node* sender, Grid* curr )
     {
         curr->setColor(curr->_color);
         
-        auto fto = FadeTo::create(0.4, curr->_entity);
+        auto fto = FadeTo::create(0.5, curr->_entity);
         curr->runAction(fto);
     }
 }

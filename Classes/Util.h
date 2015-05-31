@@ -13,7 +13,7 @@ constexpr const int num_grid_width = 13;
 constexpr const int num_grid_height = 7;
 
 constexpr const int start_level = 1;
-constexpr const int max_level = 10;
+constexpr const int max_level = 12;
 
 constexpr const float flow_speed = 0.1;
 

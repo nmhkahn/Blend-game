@@ -23,6 +23,7 @@ public:
     virtual void update( float dt ) override;
     
     void initLevel();
+    void initUI();
     void parseJSON();
     
     void stageOver();
@@ -30,6 +31,7 @@ public:
     void changeScene();
     
     /* implement in GameScene_1.cpp */
+    void connectToOther( Grid *from, Grid *to, int& numAdjacent );
     void findAdj( Grid* curr, int& numAdjacent );
     void flowAdj( Grid* curr, const int& numAdjacent );
     void flow( ColorNode* start );
@@ -55,6 +57,8 @@ private:
     Vector<Grid*> _route;    // store route to draw pipe
     
     Vector<Text*> _textList; // test : show entity
+    
+    Sprite* _prev, *_next;   // next, prev button
     
     int _winLoseCnd;         // check win condition
     int _level;              // contain current level
