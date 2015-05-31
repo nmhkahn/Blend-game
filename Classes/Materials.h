@@ -30,7 +30,7 @@ struct Pipe : public Grid
     void initPipe( const int& pipeType, const int& rotate );
     void setSpriteByRotate();
     
-    int _pipeType;  // pipe type : 0, 1, 2, 3
+    int _pipeType;  // pipe type : 0, 1, 2, 3, 4
     int _rotate;    // clockwise : 0, 1, 2, 3
 };
 

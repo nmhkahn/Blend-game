@@ -170,7 +170,6 @@ void Pipe::setSpriteByRotate()
             _connect.push_back(Vec2(_coord.x, _coord.y-1));
             _connect.push_back(Vec2(_coord.x, _coord.y+1));
         }
-        
     }
     else if( _pipeType == 3 )
     {
