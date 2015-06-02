@@ -293,12 +293,6 @@
             "rotate" : 2
         },
         {
-            "gridX"  : 1,
-            "gridY"  : 4,
-            "pipe"   : 2,
-            "rotate" : 2
-        },
-        {
             "gridX"  : 0,
             "gridY"  : 5,
             "pipe"   : 0,
@@ -337,20 +331,8 @@
         {
             "gridX"  : 5,
             "gridY"  : 0,
-            "pipe"   : 1,
+            "pipe"   : 0,
             "rotate" : 0
-        },
-        {
-            "gridX"  : 6,
-            "gridY"  : 0,
-            "pipe"   : 1,
-            "rotate" : 1
-        },
-        {
-            "gridX"  : 5,
-            "gridY"  : 3,
-            "pipe"   : 1,
-            "rotate" : 1
         },
         {
             "gridX"  : 5,
@@ -360,14 +342,8 @@
         },
         {
             "gridX"  : 7,
-            "gridY"  : 5,
-            "pipe"   : 1,
-            "rotate" : 2
-        },
-        {
-            "gridX"  : 7,
             "gridY"  : 4,
-            "pipe"   : 1,
+            "pipe"   : 0,
             "rotate" : 1
         },
         {
@@ -384,5 +360,37 @@
 
     "T_PIPE" :
     [
+        {
+            "gridX"  : 1,
+            "gridY"  : 4,
+            "endX"   : 5,
+            "endY"   : 3,
+            "type"   : 0,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 3,
+            "endX"   : 1,
+            "endY"   : 4,
+            "type"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 0,
+            "endX"   : 7,
+            "endY"   : 5,
+            "type"   : 1,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 5,
+            "endX"   : 6,
+            "endY"   : 0,
+            "type"   : 1,
+            "rotate" : 2
+        }
     ]
 }
