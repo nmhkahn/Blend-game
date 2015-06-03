@@ -72,7 +72,7 @@ void GameScene::flowAdj( Grid* curr, const int& numAdjacent )
         {
             _winLoseCnd = COND::L_BLEND;
             near->_color = Color3B::BLACK;
-            near->_entity = 255;
+            near->_entity = 0;
         }
         else
         {
@@ -151,9 +151,18 @@ void GameScene::drawColorNode( Node* sender, Grid* curr )
     // then set color to white
     else if( curr->_entity == 0 )
     {
-        curr->_color = Color3B::WHITE;
-        curr->setColor(curr->_color);
-        curr->setOpacity(0);
+        if( curr->_color == Color3B::BLACK )
+        {
+            curr->setColor(curr->_color);
+            auto fto = FadeTo::create(0.5, 255);
+            curr->runAction(fto);
+        }
+        else
+        {
+            curr->_color = Color3B::WHITE;
+            curr->setColor(curr->_color);
+            curr->setOpacity(0);
+        }
     }
     else
     {

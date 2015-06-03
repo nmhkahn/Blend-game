@@ -157,7 +157,8 @@ void GameScene::initUI()
     {
         _level = 1;
         _prev = nullptr;
-        _next = Sprite::create("res/node.png");
+        _next = Sprite::create("res/arrow.png");
+        _next->setRotation(180);
         _next->setPosition(_size.width-30, _size.height-30);
         
         addChild(_next);
@@ -165,7 +166,7 @@ void GameScene::initUI()
     else if( _level >= max_level )
     {
         _level = max_level;
-        _prev = Sprite::create("res/node.png");
+        _prev = Sprite::create("res/arrow.png");
         _prev->setPosition(30, _size.height-30);
         _next = nullptr;
         
@@ -173,9 +174,10 @@ void GameScene::initUI()
     }
     else
     {
-        _prev = Sprite::create("res/node.png");
+        _prev = Sprite::create("res/arrow.png");
         _prev->setPosition(30, _size.height-30);
-        _next = Sprite::create("res/node.png");
+        _next = Sprite::create("res/arrow.png");
+        _next->setRotation(180);
         _next->setPosition(_size.width-30, _size.height-30);
         
         addChild(_prev);
