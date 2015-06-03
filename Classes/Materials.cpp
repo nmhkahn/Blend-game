@@ -6,13 +6,33 @@ using namespace std;
 #include "Util.h"
 
 /* GRID */
+Grid* Grid::create( const Vec2& coord )
+{
+    Grid* grid = new (nothrow) Grid();
+    if( grid && grid->init() )
+    {
+        grid->autorelease();
+        grid->_coord = coord;
+        grid->_isLast = false;
+        grid->setPosition(gridToPos(grid->_coord));
+        grid->_back->setPosition(grid->getPosition());
+    }
+    else
+    {
+        CC_SAFE_DELETE(grid);
+    }
+    
+    return grid;
+}
+
 bool Grid::init()
 {
-    _before = nullptr;
+    _before = Vec2(-1, -1);
     _back = Sprite::create();
     _back->setScale(0.75, 0.75);
     _back->setColor(Color3B::WHITE);
     
+    setScale(0.75, 0.75);
     return initWithTexture(nullptr, Rect::ZERO );
 }
 

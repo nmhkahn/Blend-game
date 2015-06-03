@@ -38,6 +38,7 @@ public:
     
     void drawFlow( Node* sender, Grid* curr );
     void drawColorNode( Node* sender, Grid* curr );
+    void spillFlow( Node* sender, Grid* from );
     void clearToEmpty( Node* sender, Grid* curr );
     void flowAfter( ColorNode* start );
     
@@ -55,9 +56,7 @@ private:
     
     Vector<Grid*> _adjacent; // store adjacent grid
     Vector<Grid*> _route;    // store route to draw pipe
-    
-    Vector<Text*> _textList; // test : show entity
-    
+        
     Sprite* _prev, *_next;   // next, prev button
     
     int _winLoseCnd;         // check win condition

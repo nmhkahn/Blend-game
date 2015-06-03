@@ -6,10 +6,13 @@ USING_NS_CC;
 
 struct Grid : public Sprite
 {
+    static Grid* create( const Vec2& coord );
     virtual bool init();
     
     Vec2 _coord;                // grid coordinate
-    Grid* _before;              // store grid visited before
+    Vec2 _before;               // store grid visited before
+    bool _isLast;               // 
+    
     std::vector<Vec2> _connect; // store connected grid
     
     Color3B _color;             // carry color

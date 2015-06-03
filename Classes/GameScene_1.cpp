@@ -15,7 +15,7 @@ void GameScene::connectToOther( Grid *from, Grid *to, int& numAdjacent )
         // if connect to target -> start
         if( from->_coord == it )
         {
-            to->_before = from;
+            to->_before = from->_coord;
             _adjacent.pushBack(to);
             _route.pushBack(to);
             numAdjacent++;
@@ -38,13 +38,12 @@ void GameScene::findAdj( Grid* curr, int& numAdjacent )
         {
             // if target is not visited &&
             // is connect to start -> target
-            if( it != curr->_before &&
-                it->_coord == it2 )
-            {
-                connectToOther(curr, it, numAdjacent);
-            }
+            if( it->_coord != curr->_before &&
+                it->_coord == it2 ) connectToOther(curr, it, numAdjacent);
         }
     }
+    
+    if( !numAdjacent ) curr->_isLast = true;
 }
 
 void GameScene::flowAdj( Grid* curr, const int& numAdjacent )
@@ -72,6 +71,8 @@ void GameScene::flowAdj( Grid* curr, const int& numAdjacent )
         if( near->_color != flowColor )
         {
             _winLoseCnd = COND::L_BLEND;
+            near->_color = Color3B::BLACK;
+            near->_entity = 255;
         }
         else
         {
@@ -163,6 +164,43 @@ void GameScene::drawColorNode( Node* sender, Grid* curr )
     }
 }
 
+void GameScene::spillFlow( Node* sender, Grid* from )
+{
+    for( auto conn : from->_connect )
+    {
+        if( conn == from->_before ) continue;
+        
+        auto spr = Grid::create(conn);
+        spr->setTexture("res/spill_0.png");
+        spr->setOpacity(from->_entity);
+        spr->setColor(from->_color);
+        spr->_back->setTexture("res/spill_0.png");
+        
+        if( conn.y < from->_coord.y ) spr->setRotation(180), spr->_back->setRotation(180);
+        else if( conn.x < from->_coord.x ) spr->setRotation(270), spr->_back->setRotation(270);
+        else if( conn.x > from->_coord.x ) spr->setRotation(90), spr->_back->setRotation(90);
+        
+        addChild(spr, 30);
+        addChild(spr->_back, 20);
+        
+        Vector<SpriteFrame*> sfv;
+        for( int i = 0; i < 9; i++ )
+        {
+            string path = "res/spill_" + int_to_string(i) + ".png";
+            sfv.pushBack(SpriteFrame::create(path, Rect(0, 0, 128, 128)));
+        }
+        
+        auto anim = Animation::createWithSpriteFrames(sfv, 0.05f);
+        auto anim1 = Animate::create(anim);
+        auto anim2 = Animate::create(anim);
+        
+        auto fto = FadeTo::create(0.4, 0);
+        auto seq = Sequence::create(anim1, fto, nullptr);
+        spr->runAction(seq);
+        spr->_back->runAction(anim2);
+    }
+}
+
 void GameScene::clearToEmpty( Node* sender, Grid* curr )
 {
     curr->_entity = 0;
@@ -175,7 +213,7 @@ void GameScene::clearToEmpty( Node* sender, Grid* curr )
 void GameScene::flowAfter( ColorNode* start )
 {
     Vector<FiniteTimeAction*> vfta;
-    Vector<Grid*> ends;
+    Vector<Grid*> endNodes;
     
     // popback end node
     // : easy to implement clearToEmpty action
@@ -183,7 +221,7 @@ void GameScene::flowAfter( ColorNode* start )
     {
         if( (*it)->getTag() == TYPE::NODE )
         {
-            ends.pushBack((*it));
+            endNodes.pushBack((*it));
             it = _route.erase(it);
         }
         else
@@ -197,9 +235,15 @@ void GameScene::flowAfter( ColorNode* start )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, it)));
         vfta.pushBack(DelayTime::create(flow_speed));
+        
+        /*
+        if( it->_isLast ) vfta.pushBack(CallFuncN::create
+                                        (CC_CALLBACK_1(GameScene::spillFlow, this, it))
+                                        );
+        */
     }
-    // draw end grid
-    for( auto it : ends )
+    // draw end node grid
+    for( auto it : endNodes )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, it)));
     }
@@ -211,7 +255,7 @@ void GameScene::flowAfter( ColorNode* start )
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, it)));
-        vfta.pushBack(DelayTime::create(0.05));
+        vfta.pushBack(DelayTime::create(0.2));
     }
     
     //vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
@@ -222,8 +266,8 @@ void GameScene::flowAfter( ColorNode* start )
                                        _route.clear();
                                        for( auto it : _grids )
                                        {
-                                           it->_before = nullptr;
-                                           //it->_visit = false;
+                                           it->_before = Vec2(-1, -1);
+                                           it->_isLast = false;
                                        }
                                    }));
     // check win/lose state
@@ -246,7 +290,8 @@ void GameScene::checkWinLose()
         if( it->getTag() != TYPE::NODE ) continue;
         auto node = static_cast<ColorNode*>(it);
         
-        if( node->_color != Color3B::WHITE )
+        if( node->_color != Color3B::WHITE &&
+           node->_color != Color3B::BLACK )
         {
             totalEntity += node->_entity;
             if( node->_entity < 250 )
@@ -291,25 +336,6 @@ void GameScene::checkWinLose()
             CCLOG("WIN");
             stageClear();
             break;
-        }
-    }
-}
-
-void GameScene::updateText()
-{
-    for( auto it : _grids )
-    {
-        if( it->getTag() != TYPE::NODE ) continue;
-        auto node = static_cast<ColorNode*>(it);
-        
-        string entity = int_to_string(node->_entity);
-        
-        for( auto it2 : _textList )
-        {
-            if( (*it2).getPosition() == node->getPosition() )
-            {
-                (*it2).setString(entity);
-            }
         }
     }
 }

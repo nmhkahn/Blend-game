@@ -149,37 +149,22 @@ void GameScene::initLevel()
 {
     initUI();
     parseJSON();
-    
-    // text for help to see entity
-    for( auto it : _grids )
-    {
-        if( it->getTag() != TYPE::NODE ) continue;
-        
-        auto node = static_cast<ColorNode*>(it);
-        
-        auto text =  Text::create();
-        text->setPosition(node->getPosition());
-        text->setString(int_to_string(node->_entity));
-        text->setColor(Color3B::BLACK);
-        text->setFontSize(30);
-        
-        _textList.pushBack(text);
-        addChild(text, 100);
-    }
 }
 
 void GameScene::initUI()
 {
-    if( _level == 1 )
+    if( _level <= 1 )
     {
+        _level = 1;
         _prev = nullptr;
         _next = Sprite::create("res/node.png");
         _next->setPosition(_size.width-30, _size.height-30);
         
         addChild(_next);
     }
-    else if( _level == max_level )
+    else if( _level >= max_level )
     {
+        _level = max_level;
         _prev = Sprite::create("res/node.png");
         _prev->setPosition(30, _size.height-30);
         _next = nullptr;
@@ -306,5 +291,4 @@ void GameScene::changeScene()
 
 void GameScene::update( float dt )
 {
-    updateText();
 }
