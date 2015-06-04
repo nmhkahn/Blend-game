@@ -43,9 +43,7 @@ public:
     void flowAfter( ColorNode* start );
     
     void checkWinLose();
-    
-    void updateText();
-    
+        
 private:
     Size _size;
     Vec2 _origin;

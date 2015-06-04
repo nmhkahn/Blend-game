@@ -314,6 +314,9 @@ void TunnelPipe::initTPipe( const Vec2& end, const int& type, const int& rotate 
     _type = type;
     initPipe(0, rotate);
     
+    setTexture("res/t_pipe.png");
+    _back->setTexture("res/t_pipe.png");
+    
     _connect.clear();
     _connect.push_back(_end);
     
@@ -322,10 +325,8 @@ void TunnelPipe::initTPipe( const Vec2& end, const int& type, const int& rotate 
     else if( _rotate == 2 ) _connect.push_back(Vec2(_coord.x+1, _coord.y));
     else if( _rotate == 3 ) _connect.push_back(Vec2(_coord.x, _coord.y-1));
     
-    if( _type == 0 )      _tunnel = Sprite::create("res/t_tunnel0.png");
-    else if( _type == 1 ) _tunnel = Sprite::create("res/t_tunnel1.png");
-    else if( _type == 2 ) _tunnel = Sprite::create("res/t_tunnel2.png");
-    else if( _type == 3 ) _tunnel = Sprite::create("res/t_tunnel3.png");
+    string path = "res/t_tunnel" + int_to_string(_type) + ".png";
+    _tunnel = Sprite::create(path);
 
     _tunnel->setPosition(getPosition());
     _tunnel->setRotation(90*_rotate);

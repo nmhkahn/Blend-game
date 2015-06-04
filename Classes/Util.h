@@ -9,8 +9,8 @@ enum COLOR {RED = 0, BLUE = 1, GREEN = 2, YELLOW = 3, MAGENTA = 4, ORANGE = 5, W
 enum COND {NONE, WIN, L_BLEND, L_NOCONN, L_TOTAL};
 enum DIR {UP, DOWN, RIGHT, LEFT};
 
-constexpr const int num_grid_width = 13;
-constexpr const int num_grid_height = 7;
+constexpr const int num_grid_width = 10;
+constexpr const int num_grid_height = 6;
 
 constexpr const int start_level = 1;
 constexpr const int max_level = 15;

@@ -123,6 +123,7 @@ void GameScene::drawFlow( Node* sender, Grid* curr )
     // 2. set opacity to grid->_entity by action
     if( curr->getTag() == TYPE::NODE )
     {
+        CCLOG("%d", curr->_entity);
         drawColorNode(sender, curr);
     }
     else
@@ -144,7 +145,7 @@ void GameScene::drawColorNode( Node* sender, Grid* curr )
         curr->_entity = 255;
         curr->setColor(curr->_color);
         
-        auto fto = FadeTo::create(0.4, curr->_entity);
+        auto fto = FadeTo::create(0.5, curr->_entity);
         curr->runAction(fto);
     }
     // if   entity == 0 (not carry)
@@ -154,6 +155,7 @@ void GameScene::drawColorNode( Node* sender, Grid* curr )
         if( curr->_color == Color3B::BLACK )
         {
             curr->setColor(curr->_color);
+            
             auto fto = FadeTo::create(0.5, 255);
             curr->runAction(fto);
         }
@@ -264,7 +266,7 @@ void GameScene::flowAfter( ColorNode* start )
     for( auto it : _route )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, it)));
-        vfta.pushBack(DelayTime::create(0.2));
+        vfta.pushBack(DelayTime::create(0.1));
     }
     
     //vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));

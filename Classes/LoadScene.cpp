@@ -123,7 +123,7 @@ void LoadScene::initUI()
     else if( _level == max_level )
     {
         _prev = Sprite::create("res/arrow.png");
-        _prev->setPosition(30, _size.height-30);
+        _prev->setPosition(50, _size.height-50);
         _next = nullptr;
         
         addChild(_prev);
@@ -131,10 +131,10 @@ void LoadScene::initUI()
     else
     {
         _prev = Sprite::create("res/arrow.png");
-        _prev->setPosition(30, _size.height-30);
+        _prev->setPosition(50, _size.height-50);
         _next = Sprite::create("res/arrow.png");
         _next->setRotation(180);
-        _next->setPosition(_size.width-30, _size.height-30);
+        _next->setPosition(_size.width-50, _size.height-50);
         
         addChild(_prev);
         addChild(_next);
