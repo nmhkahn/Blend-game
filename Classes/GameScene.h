@@ -36,9 +36,9 @@ public:
     void flowAdj( Grid* curr, const int& numAdjacent );
     void flow( ColorNode* start );
     
+    void rollbackFlow( Grid* start, Grid* curr );
     void drawFlow( Node* sender, Grid* curr );
     void drawColorNode( Node* sender, Grid* curr );
-    void spillFlow( Node* sender, Grid* from );
     void clearToEmpty( Node* sender, Grid* curr );
     void flowAfter( ColorNode* start );
     
@@ -60,6 +60,8 @@ private:
     int _winLoseCnd;         // check win condition
     int _level;              // contain current level
     int _numColor;           // contain # of color in current level
+    
+    bool _touchEnable;
 };
 
 #endif

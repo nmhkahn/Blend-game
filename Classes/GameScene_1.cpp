@@ -8,6 +8,18 @@ using namespace std;
 #include "GameScene.h"
 #include "Util.h"
 
+void GameScene::rollbackFlow( Grid* start, Grid* curr )
+{
+    Vector<Grid*> rte(_route);
+    rte.reverse();
+    for( auto i : rte )
+    {
+        _route.pushBack(i);
+    }
+    _route.pushBack(start);
+    rte.clear();
+}
+
 void GameScene::connectToOther( Grid *from, Grid *to, int& numAdjacent )
 {
     for( auto it : to->_connect )
@@ -15,7 +27,9 @@ void GameScene::connectToOther( Grid *from, Grid *to, int& numAdjacent )
         // if connect to target -> start
         if( from->_coord == it )
         {
-            to->_before = from->_coord;
+            if( to->_connect.size() <= to->_before.size() ) break;
+            
+            to->_before.push_back(from->_coord);
             _adjacent.pushBack(to);
             _route.pushBack(to);
             numAdjacent++;
@@ -32,14 +46,16 @@ void GameScene::findAdj( Grid* curr, int& numAdjacent )
         // if two nodes are adjacent, ignore them
         if( curr->getTag() == TYPE::NODE &&
             it->getTag() == TYPE::NODE ) continue;
-        
+
         // for-all connected-grid of start's
         for( auto it2 : curr->_connect )
         {
             // if target is not visited &&
             // is connect to start -> target
-            if( it->_coord != curr->_before &&
-                it->_coord == it2 ) connectToOther(curr, it, numAdjacent);
+            if( curr->_before.end() == find(curr->_before.begin(), curr->_before.end(), it->_coord) )
+            {
+                if( it->_coord == it2 ) connectToOther(curr, it, numAdjacent);
+            }
         }
     }
     
@@ -106,7 +122,7 @@ void GameScene::flow( ColorNode* start )
         if( !numAdjacent &&
             curr->getTag() != TYPE::NODE )
         {
-            _winLoseCnd = COND::L_NOCONN;
+            rollbackFlow(start, curr);
             return;
         }
         // if no adjacent node, continue
@@ -123,7 +139,6 @@ void GameScene::drawFlow( Node* sender, Grid* curr )
     // 2. set opacity to grid->_entity by action
     if( curr->getTag() == TYPE::NODE )
     {
-        CCLOG("%d", curr->_entity);
         drawColorNode(sender, curr);
     }
     else
@@ -175,43 +190,6 @@ void GameScene::drawColorNode( Node* sender, Grid* curr )
     }
 }
 
-void GameScene::spillFlow( Node* sender, Grid* from )
-{
-    for( auto conn : from->_connect )
-    {
-        if( conn == from->_before ) continue;
-        
-        auto spr = Grid::create(conn);
-        spr->setTexture("res/spill_0.png");
-        spr->setOpacity(from->_entity);
-        spr->setColor(from->_color);
-        spr->_back->setTexture("res/spill_0.png");
-        
-        if( conn.y < from->_coord.y ) spr->setRotation(180), spr->_back->setRotation(180);
-        else if( conn.x < from->_coord.x ) spr->setRotation(270), spr->_back->setRotation(270);
-        else if( conn.x > from->_coord.x ) spr->setRotation(90), spr->_back->setRotation(90);
-        
-        addChild(spr, 30);
-        addChild(spr->_back, 20);
-        
-        Vector<SpriteFrame*> sfv;
-        for( int i = 0; i < 9; i++ )
-        {
-            string path = "res/spill_" + int_to_string(i) + ".png";
-            sfv.pushBack(SpriteFrame::create(path, Rect(0, 0, 128, 128)));
-        }
-        
-        auto anim = Animation::createWithSpriteFrames(sfv, 0.05f);
-        auto anim1 = Animate::create(anim);
-        auto anim2 = Animate::create(anim);
-        
-        auto fto = FadeTo::create(0.4, 0);
-        auto seq = Sequence::create(anim1, fto, nullptr);
-        spr->runAction(seq);
-        spr->_back->runAction(anim2);
-    }
-}
-
 void GameScene::clearToEmpty( Node* sender, Grid* curr )
 {
     curr->_entity = 0;
@@ -246,12 +224,6 @@ void GameScene::flowAfter( ColorNode* start )
     {
         vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::drawFlow, this, it)));
         vfta.pushBack(DelayTime::create(flow_speed));
-        
-        /*
-        if( it->_isLast ) vfta.pushBack(CallFuncN::create
-                                        (CC_CALLBACK_1(GameScene::spillFlow, this, it))
-                                        );
-        */
     }
     // draw end node grid
     for( auto it : endNodes )
@@ -260,8 +232,21 @@ void GameScene::flowAfter( ColorNode* start )
     }
     vfta.pushBack(DelayTime::create(0.2));
     
-    // clear to empty start node
-    vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, start)));
+
+    if( !endNodes.contains(start) )
+    {
+        // clear to empty start node
+        vfta.pushBack(CallFuncN::create(CC_CALLBACK_1(GameScene::clearToEmpty, this, start)));
+    }
+    // if no connect
+    else
+    {
+        long size = _route.size();
+        auto iter = _route.begin()+size*0.5;
+        
+        _route.erase(_route.begin(), iter);
+    }
+    
     // draw route pipe empty
     for( auto it : _route )
     {
@@ -269,17 +254,18 @@ void GameScene::flowAfter( ColorNode* start )
         vfta.pushBack(DelayTime::create(0.1));
     }
     
-    //vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::updateText, this)));
-    
     // clear route for next touch
     vfta.pushBack(CallFunc::create([&]()
                                    {
+                                       _adjacent.clear();
                                        _route.clear();
                                        for( auto it : _grids )
                                        {
-                                           it->_before = Vec2(-1, -1);
+                                           it->_before.clear();
                                            it->_isLast = false;
                                        }
+                                       
+                                       _touchEnable = true;
                                    }));
     // check win/lose state
     vfta.pushBack(CallFunc::create(CC_CALLBACK_0(GameScene::checkWinLose, this)));
@@ -327,12 +313,6 @@ void GameScene::checkWinLose()
         case COND::L_BLEND:
         {
             CCLOG("L_BLEND");
-            stageOver();
-            break;
-        }
-        case COND::L_NOCONN:
-        {
-            CCLOG("L_NOCONN");
             stageOver();
             break;
         }

@@ -51,6 +51,7 @@ bool GameScene::init( const int& level )
     
     _level = level;
     _winLoseCnd = COND::NONE;
+    _touchEnable = true;
     initLevel();
     
     schedule(CC_SCHEDULE_SELECTOR(GameScene::update));
@@ -100,12 +101,15 @@ void GameScene::onEnter()
             {
                 case TYPE::NODE:
                 {
+                    if( !_touchEnable ) break;
+                    
                     auto node = static_cast<ColorNode*>(it);
                     if( node->_color == Color3B::WHITE ) continue;
                     
                     auto rect = node->getBoundingBox();
                     if( rect.containsPoint(loc) )
                     {
+                        _touchEnable = false;
                         flow(node);
                         flowAfter(node);
                     }

@@ -27,7 +27,6 @@ Grid* Grid::create( const Vec2& coord )
 
 bool Grid::init()
 {
-    _before = Vec2(-1, -1);
     _back = Sprite::create();
     _back->setScale(0.75, 0.75);
     _back->setColor(Color3B::WHITE);

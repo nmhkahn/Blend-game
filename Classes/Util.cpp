@@ -12,11 +12,6 @@ Vec2 gridToPos( const Vec2& grid )
     float margin_width = (size.width - 96*num_grid_width)*0.5;
     float margin_height = (size.height - 96*num_grid_height)*0.5;
     
-    CCLOG("size: %f %f", size.width, size.height);
-    CCLOG("grid: %d %d", 96*num_grid_width, 96*num_grid_height);
-    
-    CCLOG("%f %f", margin_width, margin_height);
-    
     return Vec2(96*grid.x+margin_width+48, 96*grid.y+margin_height+48);
 }
 
