@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "LoadScene.h"
+#include "GameScene.h"
 #include "Util.h"
 
 USING_NS_CC;
@@ -35,7 +36,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::create("My Game");
+        glview = GLViewImpl::create("255 alpha");
         director->setOpenGLView(glview);
     }
 
@@ -46,10 +47,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0 / 60);
 
     register_all_packages();
-
-    // create a scene. it's an autorelease object
-    auto scene = LoadScene::createScene(start_level);
-
+    
+    int level = UserDefault::getInstance()->getIntegerForKey("level", start_level);
+    Scene* scene;
+    if( level != 1 ) scene = LoadScene::createScene(level);
+    else scene = GameScene::createScene(level);
     // run
     director->runWithScene(scene);
 

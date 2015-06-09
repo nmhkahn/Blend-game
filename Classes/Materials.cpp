@@ -266,10 +266,17 @@ SwitchPipe* SwitchPipe::create( const Vec2& coord )
 
 void SwitchPipe::initSPipe( const int &rotate1, const int &rotate2 )
 {
+    _current = 0;
     _switch[0] = 0, _switch[1] = 1;
     _swtrot[0] = rotate1, _swtrot[1] = rotate2;
-    _current = 0;
+    
     initPipe(_switch[0], _swtrot[0]);
+    
+    _other = Sprite::create("res/pipe1.png");
+    _other->setOpacity(128);
+    _other->setPosition(getPosition());
+    _other->setScale(0.75, 0.75);
+    _other->setRotation(90*_swtrot[1]);
     
     _ground = Sprite::create("res/s_ground.png");
     _ground->setPosition(getPosition());
@@ -278,11 +285,61 @@ void SwitchPipe::initSPipe( const int &rotate1, const int &rotate2 )
 
 void SwitchPipe::switchPipe()
 {
+    _connect.clear();
     _current = ++_current%2;
     
-    _pipeType = _switch[_current];
-    _rotate = _swtrot[_current];
-    setSpriteByRotate();
+    if( _current )
+    {
+        if( _swtrot[_current] == 0 )
+        {
+            _connect.push_back(Vec2(_coord.x-1, _coord.y));
+            _connect.push_back(Vec2(_coord.x, _coord.y+1));
+        }
+        else if( _swtrot[_current] == 1 )
+        {
+            _connect.push_back(Vec2(_coord.x+1, _coord.y));
+            _connect.push_back(Vec2(_coord.x, _coord.y+1));
+        }
+        else if( _swtrot[_current] == 2 )
+        {
+            _connect.push_back(Vec2(_coord.x+1, _coord.y));
+            _connect.push_back(Vec2(_coord.x, _coord.y-1));
+        }
+        else if( _swtrot[_current] == 3 )
+        {
+            _connect.push_back(Vec2(_coord.x-1, _coord.y));
+            _connect.push_back(Vec2(_coord.x, _coord.y-1));
+        }
+        
+        setTexture("res/pipe1.png");
+        _back->setTexture("res/pipe1.png");
+        _other->setTexture("res/pipe0.png");
+        
+        setRotation(90*_swtrot[1]);
+        _back->setRotation(90*_swtrot[1]);
+        _other->setRotation(90*_swtrot[0]);
+    }
+    else
+    {
+        if( _swtrot[_current] % 2 == 0 )
+        {
+            _connect.push_back(Vec2(_coord.x+1, _coord.y));
+            _connect.push_back(Vec2(_coord.x-1, _coord.y));
+        }
+        else
+        {
+            _connect.push_back(Vec2(_coord.x, _coord.y+1));
+            _connect.push_back(Vec2(_coord.x, _coord.y-1));
+        }
+        
+        setTexture("res/pipe0.png");
+        _back->setTexture("res/pipe0.png");
+        _other->setTexture("res/pipe1.png");
+        
+        setRotation(90*_swtrot[0]);
+        _back->setRotation(90*_swtrot[0]);
+        _other->setRotation(90*_swtrot[1]);
+    }
 }
 
 

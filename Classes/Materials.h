@@ -55,6 +55,7 @@ struct SwitchPipe : public Pipe
     int _switch[2];  // store pipe type for each switch
     int _swtrot[2];  // store rotate for each switch
     int _current;    // current switch
+    Sprite* _other;
     Sprite* _ground; // ground sprite
 };
 

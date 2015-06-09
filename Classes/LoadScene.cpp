@@ -109,18 +109,25 @@ void LoadScene::initUI()
     _indicator->setPosition(_center);
     _indicator->setString(int_to_string(_level));
     _indicator->setFontSize(50);
+    _indicator->setOpacity(0);
     addChild(_indicator);
     
-    if( _level == 1 )
+    auto foa = FadeIn::create(0.5);
+    _indicator->runAction(foa);
+    
+    if( _level < max_level &&
+        UserDefault::getInstance()->getIntegerForKey("level") < _level )
     {
-        _prev = nullptr;
+        _prev = Sprite::create("res/arrow.png");
+        _prev->setPosition(50, _size.height-50);
         _next = Sprite::create("res/arrow.png");
         _next->setRotation(180);
         _next->setPosition(_size.width-50, _size.height-50);
         
+        addChild(_prev);
         addChild(_next);
     }
-    else if( _level == max_level )
+    else
     {
         _prev = Sprite::create("res/arrow.png");
         _prev->setPosition(50, _size.height-50);
@@ -128,31 +135,20 @@ void LoadScene::initUI()
         
         addChild(_prev);
     }
-    else
-    {
-        _prev = Sprite::create("res/arrow.png");
-        _prev->setPosition(50, _size.height-50);
-        _next = Sprite::create("res/arrow.png");
-        _next->setRotation(180);
-        _next->setPosition(_size.width-50, _size.height-50);
-        
-        addChild(_prev);
-        addChild(_next);
-    }
 }
 
 void LoadScene::hideIndicator()
 {
-    auto foa = FadeOut::create(1.0);
+    auto foa = FadeOut::create(0.5);
     _indicator->runAction(foa);
 }
 
 void LoadScene::transitScene()
 {
-    Director:: getInstance()->replaceScene(GameScene::createScene(_level));
+    Director::getInstance()->replaceScene(GameScene::createScene(_level));
 }
 
 void LoadScene::changeScene()
 {
-    Director:: getInstance()->replaceScene(LoadScene::createScene(_level));
+    Director::getInstance()->replaceScene(LoadScene::createScene(_level));
 }

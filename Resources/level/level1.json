@@ -1,64 +1,39 @@
 { 
     "INFO" :
     {
-        "numColor" : 3
+        "numColor" : 1
     },
 
     "NODE" :
     [
         {
-            "gridX"  : 4,
-            "gridY"  : 2,
-            "color"  : 0,
+            "gridX"  : 3,
+            "gridY"  : 1,
+            "color"  : 5,
             "entity" : 128
         },
         {
-            "gridX"  : 4,
-            "gridY"  : 3,
-            "color"  : 0,
+            "gridX"  : 6,
+            "gridY"  : 1,
+            "color"  : 5,
             "entity" : 128
-        },
-        {
-            "gridX"  : 5,
-            "gridY"  : 2,
-            "color"  : 1,
-            "entity" : 128
-        },
-        {
-            "gridX"  : 5,
-            "gridY"  : 3,
-            "color"  : 1,
-            "entity" : 128        
-        },
-
-        {
-            "gridX"  : 0,
-            "gridY"  : 0,
-            "color"  : 4,
-            "entity" : 128
-        },
-        {
-            "gridX"  : 0,
-            "gridY"  : 5,
-            "color"  : 4,
-            "entity" : 128
-        },
-        {
-            "gridX"  : 9,
-            "gridY"  : 0,
-            "color"  : 4,
-            "entity" : 128
-        },
-        {
-            "gridX"  : 9,
-            "gridY"  : 5,
-            "color"  : 4,
-            "entity" : 128        
         }
     ],
 
     "N_PIPE" :
     [
+        {
+            "gridX"  : 4,
+            "gridY"  : 1,
+            "pipe"   : 0,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 1,
+            "pipe"   : 0,
+            "rotate" : 0
+        }
     ],
 
     "R_PIPE" :

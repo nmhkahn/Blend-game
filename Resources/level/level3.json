@@ -1,32 +1,20 @@
 { 
     "INFO" :
     {
-        "numColor" : 2
+        "numColor" : 1
     },
 
     "NODE" :
     [
         {
             "gridX"  : 2,
-            "gridY"  : 4,
-            "color"  : 0,
-            "entity" : 130
-        },
-        {
-            "gridX"  : 6,
-            "gridY"  : 4,
+            "gridY"  : 3,
             "color"  : 2,
             "entity" : 130
         },
         {
-            "gridX"  : 2,
-            "gridY"  : 0,
-            "color"  : 0,
-            "entity" : 130
-        },
-        {
-            "gridX"  : 6,
-            "gridY"  : 0,
+            "gridX"  : 7,
+            "gridY"  : 3,
             "color"  : 2,
             "entity" : 130        
         }
@@ -35,35 +23,23 @@
     "N_PIPE" :
     [
         {
-            "gridX"  : 1,
-            "gridY"  : 0,
-            "pipe"   : 1,
+            "gridX"  : 3,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 0
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 4,
+            "pipe"   : 0,
             "rotate" : 1
         },
         {
             "gridX"  : 4,
-            "gridY"  : 0,
+            "gridY"  : 2,
             "pipe"   : 0,
             "rotate" : 1
         },
-        {
-            "gridX"  : 7,
-            "gridY"  : 0,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 8,
-            "gridY"  : 0,
-            "pipe"   : 1,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 1,
-            "gridY"  : 1,
-            "pipe"   : 1,
-            "rotate" : 2
-        },
         
         {
             "gridX"  : 3,
@@ -71,141 +47,47 @@
             "pipe"   : 0,
             "rotate" : 0
         },
-        
         {
             "gridX"  : 5,
             "gridY"  : 1,
             "pipe"   : 0,
             "rotate" : 0
         },
-        
         {
-            "gridX"  : 7,
+            "gridX"  : 6,
             "gridY"  : 1,
             "pipe"   : 0,
             "rotate" : 0
         },
-        {
-            "gridX"  : 9,
-            "gridY"  : 1,
-            "pipe"   : 1,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 9,
-            "gridY"  : 2,
-            "pipe"   : 1,
-            "rotate" : 3
-        },
         
         {
             "gridX"  : 7,
             "gridY"  : 2,
             "pipe"   : 0,
-            "rotate" : 0
-        },
-        
-        {
-            "gridX"  : 5,
-            "gridY"  : 2,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        
-        {
-            "gridX"  : 3,
-            "gridY"  : 2,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        
-        {
-            "gridX"  : 3,
-            "gridY"  : 3,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 7,
-            "gridY"  : 3,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 8,
-            "gridY"  : 3,
-            "pipe"   : 1,
-            "rotate" : 3
+            "type"   : 10,
+            "rotate" : 1
         }
     ],
 
     "R_PIPE" :
     [
         {
-            "gridX"  : 2,
+            "gridX"  : 7,
             "gridY"  : 1,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 6,
-            "gridY"  : 3,
-            "pipe"   : 0,
-            "rotate" : 1
-        },
-        {
-            "gridX"  : 4,
-            "gridY"  : 3,
-            "pipe"   : 2,
-            "rotate" : 1
-        },
-        {
-            "gridX"  : 2,
-            "gridY"  : 2,
             "pipe"   : 1,
-            "rotate" : 1
-        },
-        {
-            "gridX"  : 2,
-            "gridY"  : 3,
-            "pipe"   : 2,
-            "rotate" : 1
-        },
-        {
-            "gridX"  : 4,
-            "gridY"  : 1,
-            "pipe"   : 0,
             "rotate" : 0
         },
         {
             "gridX"  : 4,
-            "gridY"  : 2,
+            "gridY"  : 1,
             "pipe"   : 1,
-            "rotate" : 1
+            "rotate" : 3
         },
         {
-            "gridX"  : 6,
-            "gridY"  : 2,
-            "pipe"   : 0,
-            "rotate" : 1
-        },
-        {
-            "gridX"  : 8,
-            "gridY"  : 2,
-            "pipe"   : 0,
+            "gridX"  : 4,
+            "gridY"  : 3,
+            "pipe"   : 1,
             "rotate" : 0
-        },
-        {
-            "gridX"  : 6,
-            "gridY"  : 1,
-            "pipe"   : 0,
-            "rotate" : 0
-        },
-        {
-            "gridX"  : 8,
-            "gridY"  : 1,
-            "pipe"   : 0,
-            "rotate" : 1
         }
     ],
 

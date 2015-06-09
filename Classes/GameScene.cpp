@@ -46,6 +46,7 @@ bool GameScene::init( const int& level )
     _center = _origin + _size / 2;
     
     _background = Sprite::create("res/background.png");
+    _background->setTag(1111);
     _background->setPosition(_center);
     this->addChild(_background, 0);
     
@@ -157,35 +158,32 @@ void GameScene::initLevel()
 
 void GameScene::initUI()
 {
-    if( _level <= 1 )
+    if( _level == 1 )
     {
-        _level = 1;
-        _prev = nullptr;
+        auto logo = Sprite::create("res/logo.png");
+        logo->setPosition(_center.x, _center.y*1.5);
+        addChild(logo);
+        
+    }
+    else if( _level < max_level &&
+            UserDefault::getInstance()->getIntegerForKey("level") < _level )
+    {
+        _prev = Sprite::create("res/arrow.png");
+        _prev->setPosition(50, _size.height-50);
         _next = Sprite::create("res/arrow.png");
         _next->setRotation(180);
         _next->setPosition(_size.width-50, _size.height-50);
         
-        addChild(_next);
-    }
-    else if( _level >= max_level )
-    {
-        _level = max_level;
-        _prev = Sprite::create("res/arrow.png");
-        _prev->setPosition(50, _size.height-50);
-        _next = nullptr;
-        
         addChild(_prev);
+        addChild(_next);
     }
     else
     {
         _prev = Sprite::create("res/arrow.png");
         _prev->setPosition(50, _size.height-50);
-        _next = Sprite::create("res/arrow.png");
-        _next->setRotation(180);
-        _next->setPosition(_size.width-50, _size.height-50);
+        _next = nullptr;
         
         addChild(_prev);
-        addChild(_next);
     }
 }
 
@@ -193,7 +191,7 @@ void GameScene::parseJSON()
 {
     string level = int_to_string(_level);
     string path  = "level/level"+level+".json";
-        
+            
     auto futil = FileUtils::getInstance();
     auto str = (futil->getStringFromFile(path));
     
@@ -255,6 +253,7 @@ void GameScene::parseJSON()
         
         addChild(pipe, 10);
         addChild(pipe->_back, 1);
+        addChild(pipe->_other, 9);
         addChild(pipe->_ground, 5);
         _grids.pushBack(pipe);
     }
@@ -281,7 +280,15 @@ void GameScene::stageOver()
 
 void GameScene::stageClear()
 {
-    if( _level < max_level ) _level++;
+    if( _level < max_level )
+    {
+        _level++;
+        if( _level >= UserDefault::getInstance()->getIntegerForKey("level", start_level) )
+        {
+            UserDefault::getInstance()->setIntegerForKey("level", _level);
+            UserDefault::getInstance()->flush();
+        }
+    }
     changeScene();
 }
                  
@@ -290,7 +297,18 @@ void GameScene::changeScene()
     auto seq = Sequence::create(DelayTime::create(0.5f),
                                 CallFunc::create([&]()
                                 {
-                                    Director::getInstance()->replaceScene(LoadScene::createScene(_level));
+                                    for( auto i : getChildren() )
+                                    {
+                                        if( i->getTag() == 1111 ) continue;
+                                        auto foa = FadeOut::create(1.0);
+                                        i->runAction(foa);
+                                    }
+                                }),
+                                DelayTime::create(1.0f),
+                                CallFunc::create([&]()
+                                {
+                                    if( _level == 1 ) Director::getInstance()->replaceScene(GameScene::createScene(_level));
+                                    else Director::getInstance()->replaceScene(LoadScene::createScene(_level));
                                 }), nullptr);
     runAction(seq);
 }
