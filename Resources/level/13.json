@@ -1,0 +1,187 @@
+{ 
+    "INFO" :
+    {
+        "numColor" : 2
+    },
+
+    "NODE" :
+    [
+        {
+            "gridX"  : 2,
+            "gridY"  : 1,
+            "color"  : 4,
+            "entity" : 128
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 1,
+            "color"  : 4,
+            "entity" : 128
+        },
+
+        {
+            "gridX"  : 4,
+            "gridY"  : 1,
+            "color"  : 5,
+            "entity" : 128
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 1,
+            "color"  : 5,
+            "entity" : 128
+        }
+    ],
+
+    "N_PIPE" :
+    [
+        {
+            "gridX"  : 2,
+            "gridY"  : 2,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 2,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 2,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+
+        {
+            "gridX"  : 3,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 3,
+            "gridY"  : 2,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 3,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 2,
+            "pipe"   : 0,
+            "rotate" : 1
+        },
+
+        {
+            "gridX"  : 3,
+            "gridY"  : 1,
+            "pipe"   : 1,
+            "rotate" : 1
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 1,
+            "pipe"   : 1,
+            "rotate" : 0
+        }
+    ],
+
+    "R_PIPE" :
+    [
+    ],
+
+    "S_PIPE" :
+    [
+        {
+            "gridX"  : 4,
+            "gridY"  : 2,
+            "rot1"   : 1,
+            "rot2"   : 1
+        },
+        {
+            "gridX"  : 5,
+            "gridY"  : 2,
+            "rot1"   : 1,
+            "rot2"   : 0
+        }
+    ],
+
+    "T_PIPE" :
+    [
+        {
+            "gridX"  : 2,
+            "gridY"  : 4,
+            "endX"   : 4,
+            "endY"   : 4,
+            "type"   : 0,
+            "rotate" : 3
+        },
+        {
+            "gridX"  : 4,
+            "gridY"  : 4,
+            "endX"   : 2,
+            "endY"   : 4,
+            "type"   : 0,
+            "rotate" : 3
+        },
+
+        {
+            "gridX"  : 3,
+            "gridY"  : 4,
+            "endX"   : 6,
+            "endY"   : 4,
+            "type"   : 1,
+            "rotate" : 3
+        },
+        {
+            "gridX"  : 6,
+            "gridY"  : 4,
+            "endX"   : 3,
+            "endY"   : 4,
+            "type"   : 1,
+            "rotate" : 3
+        },
+
+        {
+            "gridX"  : 5,
+            "gridY"  : 4,
+            "endX"   : 7,
+            "endY"   : 4,
+            "type"   : 2,
+            "rotate" : 3
+        },
+        {
+            "gridX"  : 7,
+            "gridY"  : 4,
+            "endX"   : 5,
+            "endY"   : 4,
+            "type"   : 2,
+            "rotate" : 3
+        }
+    ]
+}

@@ -58,8 +58,6 @@ void GameScene::findAdj( Grid* curr, int& numAdjacent )
             }
         }
     }
-    
-    if( !numAdjacent ) curr->_isLast = true;
 }
 
 void GameScene::flowAdj( Grid* curr, const int& numAdjacent )
@@ -262,7 +260,6 @@ void GameScene::flowAfter( ColorNode* start )
                                        for( auto it : _grids )
                                        {
                                            it->_before.clear();
-                                           it->_isLast = false;
                                        }
                                        
                                        _touchEnable = true;

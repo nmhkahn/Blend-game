@@ -73,14 +73,14 @@ void LoadScene::onEnter()
         if( _prev != nullptr &&
            _prev->getBoundingBox().containsPoint(loc) )
         {
-            _level--;
+            if( _level > 1 ) _level--;
             changeScene();
         }
         
         if( _next != nullptr &&
            _next->getBoundingBox().containsPoint(loc) )
         {
-            _level++;
+            if( _level < max_level ) _level++;
             changeScene();
         }
     };
@@ -116,7 +116,7 @@ void LoadScene::initUI()
     _indicator->runAction(foa);
     
     if( _level < max_level &&
-        UserDefault::getInstance()->getIntegerForKey("level") < _level )
+        UserDefault::getInstance()->getIntegerForKey("level") > _level )
     {
         _prev = Sprite::create("res/arrow.png");
         _prev->setPosition(50, _size.height-50);
@@ -150,5 +150,6 @@ void LoadScene::transitScene()
 
 void LoadScene::changeScene()
 {
-    Director::getInstance()->replaceScene(LoadScene::createScene(_level));
+    if( _level == 1 ) Director::getInstance()->replaceScene(GameScene::createScene(_level));
+    else Director::getInstance()->replaceScene(LoadScene::createScene(_level));
 }

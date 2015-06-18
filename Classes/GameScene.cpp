@@ -84,14 +84,14 @@ void GameScene::onEnter()
         if( _prev != nullptr &&
             _prev->getBoundingBox().containsPoint(loc) )
         {
-            _level--;
+            if( _level > 1 ) _level--;
             changeScene();
         }
         
         if( _next != nullptr &&
             _next->getBoundingBox().containsPoint(loc) )
         {
-            _level++;
+            if( _level < max_level ) _level++;
             changeScene();
         }
         
@@ -166,7 +166,7 @@ void GameScene::initUI()
         
     }
     else if( _level < max_level &&
-            UserDefault::getInstance()->getIntegerForKey("level") < _level )
+            UserDefault::getInstance()->getIntegerForKey("level") > _level )
     {
         _prev = Sprite::create("res/arrow.png");
         _prev->setPosition(50, _size.height-50);
@@ -190,8 +190,8 @@ void GameScene::initUI()
 void GameScene::parseJSON()
 {
     string level = int_to_string(_level);
-    string path  = "level/level"+level+".json";
-            
+    string path  = "level/"+level+".json";
+    
     auto futil = FileUtils::getInstance();
     auto str = (futil->getStringFromFile(path));
     

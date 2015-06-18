@@ -10,7 +10,6 @@ struct Grid : public Sprite
     virtual bool init();
     
     Vec2 _coord;                // grid coordinate
-    bool _isLast;               // 
     
     std::vector<Vec2> _before;  // store grid visited before
     std::vector<Vec2> _connect; // store connected grid

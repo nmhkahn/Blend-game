@@ -13,7 +13,6 @@ Grid* Grid::create( const Vec2& coord )
     {
         grid->autorelease();
         grid->_coord = coord;
-        grid->_isLast = false;
         grid->setPosition(gridToPos(grid->_coord));
         grid->_back->setPosition(grid->getPosition());
     }
